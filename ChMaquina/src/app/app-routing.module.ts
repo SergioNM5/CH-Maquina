@@ -14,6 +14,10 @@ const routes: Routes = [
     path: 'instructions',
     loadChildren: () => import('./instructions/instructions.module').then(m => m.InstructionsModule)
   },
+  {
+    path: 'memory',
+    loadChildren: () => import('./memory/memory.module').then(m => m.MemoryModule)
+  },
   { path: '', pathMatch: 'full', redirectTo: 'home' },
 ];
 
