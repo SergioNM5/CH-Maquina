@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { faCoffee, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -6,10 +6,24 @@ import { faCoffee, IconDefinition } from '@fortawesome/free-solid-svg-icons';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent {
+
+  fileName = '';
+  listFileName: string [] = [];
   constructor() { }
 
-  ngOnInit(): void {
-  }
+  onFileSelected(event: any) {
 
+    const file:File = event.target.files[0];
+    console.log(file);
+
+    if (file) {
+
+        this.fileName = file.name;
+        this.listFileName.push(this.fileName);
+
+        console.log(this.listFileName);
+
+    }
+  }
 }

@@ -20,6 +20,9 @@ main {
   }
   .inputFile {
     margin: 20px 0;
+    .fileInput {
+      display: none;
+    }
   }
 
   .periferics {
@@ -28,13 +31,13 @@ main {
     flex-direction: column;
     align-items: center;
     margin-top: 20px;
-    @media(min-width: 800px) {
+    @media (min-width: 800px) {
       flex-direction: row;
       justify-content: center;
-      .monitor{
-        width: 50%;
+      .monitor {
+        width: 70%;
         &__text {
-          width: 60%;
+          width: 30%;
         }
       }
     }
@@ -49,18 +52,17 @@ main {
     display: flex;
     justify-content: center;
     @media (min-width: 800px) {
-
     }
     &__text {
       width: 60%;
       height: 50%;
       margin-top: 50px;
-      color: #683BB6;
+      color: #683bb6;
       p {
         padding: 10px;
       }
       @media (min-width: 800px) {
-        width: 30%;
+        width: 10%;
       }
     }
   }
@@ -69,8 +71,9 @@ main {
     gap: 20px;
     grid-template-columns: 2fr 100px 100px;
     grid-template-rows: 1fr 1fr;
-    grid-template-areas: "icon text-area text-area"
-                          "title text-area text-area";
+    grid-template-areas:
+      "icon text-area text-area"
+      "title text-area text-area";
     &__icon {
       grid-area: icon;
     }
@@ -84,9 +87,7 @@ main {
       align-items: center;
       border-radius: 10px;
       background: #fff;
-      box-shadow:  10px 10px 20px #bebebe,
-             -10px -10px 60px #ffffff;
+      box-shadow: 10px 10px 20px #bebebe, -10px -10px 60px #ffffff;
     }
   }
-
 }
