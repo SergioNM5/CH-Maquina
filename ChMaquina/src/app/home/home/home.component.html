@@ -4,13 +4,13 @@
       <div class="inputs__div">
         <mat-form-field>
           <mat-label>Kernel</mat-label>
-            <input matInput type="number" placeholder="Kernel" disabled>
+            <input matInput type="number" placeholder="Kernel" id="kernel" (change)="getKernel($event)" value=19>
         </mat-form-field>
       </div>
       <div class="inputs__div">
         <mat-form-field>
           <mat-label>Memoria</mat-label>
-            <input matInput type="number" placeholder="Memoria" disabled>
+            <input matInput type="number" placeholder="Memoria" id='memory' (change)="getMemory($event)" value=100>
         </mat-form-field>
       </div>
     </div>
