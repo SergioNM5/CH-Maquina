@@ -12,6 +12,7 @@ export class HomeComponent {
   fileName = '';
   fileCh: FileCH = new FileCH();
   file: any;
+  lines: any[] = [];
 
   constructor() { }
 
@@ -26,8 +27,10 @@ export class HomeComponent {
     }
     fileReader.readAsText(this.file);
     console.log(this.fileCh);
-
-    
+    setTimeout(() => {
+      this.lines.push(this.fileCh.codeLines); //Lamar a una funcion en el servicio que retorne instancia de fileCh bien
+      console.log(this.lines);
+    },3000)
 
   }
 }
