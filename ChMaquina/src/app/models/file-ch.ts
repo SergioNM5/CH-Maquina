@@ -3,8 +3,8 @@ import { Tag } from "./tag";
 
 
 export class FileCH {
-  _id: number;
-  _name: string;
+  _id: number = 0;
+  _name: string = '';
   // instructions amount
   _amountInst: number = 0;
   // initial position in memory
@@ -14,12 +14,10 @@ export class FileCH {
   // final position with variables in memory
   fpvMemory: number = 0;
   // final position with variables in memory
-  codeLines: string[] = [];
+  codeLines: string | ArrayBuffer | null = '';
   tags: Tag[] = [];
   variables: variables[] = [];
 
-  constructor(id: number, name: string) {
-    this._id = id;
-    this._name = name;
+  constructor() {
   }
 }

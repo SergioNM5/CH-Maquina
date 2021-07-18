@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { faCoffee, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { FileCH } from 'src/app/models/file-ch';
 
 @Component({
   selector: 'app-home',
@@ -9,21 +10,24 @@ import { faCoffee, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 export class HomeComponent {
 
   fileName = '';
-  listFileName: string [] = [];
+  fileCh: FileCH = new FileCH();
+  file: any;
+
   constructor() { }
 
   onFileSelected(event: any) {
 
-    const file:File = event.target.files[0];
-    console.log(file);
-
-    if (file) {
-
-        this.fileName = file.name;
-        this.listFileName.push(this.fileName);
-
-        console.log(this.listFileName);
-
+    this.file = event.target.files[0];
+    let fileReader = new FileReader();
+    fileReader.onload = (e) => {
+      console.log(fileReader.result);
+      this.fileCh.codeLines = fileReader.result;
+      console.log(this.fileCh.codeLines);
     }
+    fileReader.readAsText(this.file);
+    console.log(this.fileCh);
+
+    
+
   }
 }

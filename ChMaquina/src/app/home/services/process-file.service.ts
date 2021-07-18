@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -5,18 +6,9 @@ import { Injectable } from '@angular/core';
 })
 export class ProcessFileService {
 
-  constructor() { }
+  constructor( private http: HttpClient ) { }
 
-  processFile(ch: any, callback: any) {
-    var reader = new FileReader();
-    reader.readAsText(ch);
-    reader.onload = function () {
-      callback(reader.result);
-    }
-  }
 
-  transformFile(file: File) {
-    
-  }
+
 }
 
