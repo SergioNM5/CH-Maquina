@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { faCoffee, IconDefinition } from '@fortawesome/free-solid-svg-icons';
-import { FileCH } from 'src/app/models/file-ch';
 import { ProcessFileService } from '../services/process-file.service';
-import { NavComponent } from '../../nav/nav.component';
 import { HelperService } from 'src/app/services/helper.service';
 
 @Component({
@@ -20,6 +17,7 @@ export class HomeComponent implements OnInit {
   memory: number = 100;
   acumulador: number = 0;
   contId: number = 1+this.kernel;
+  prueba: number = 1+this.kernel;
   buttonState: boolean = false;
 
   constructor(
@@ -39,6 +37,17 @@ export class HomeComponent implements OnInit {
     setTimeout(() => {
       this.lines.push(this.processFile.transformFile(this.fileLoaded, this.kernel, this.contId, this.lines.length, this.fileName)); //Lamar a una funcion en el servicio que retorne instancia de fileCh bien
       console.log(this.lines);
+
+      //each file with their id lines
+      for(let i=this.acumulador; i<this.lines.length; i++) {
+        for(let j of this.lines[i].codeLines) {
+          j.unshift(this.prueba);
+          this.prueba++
+        }
+      }
+      this.acumulador++;
+      console.log(this.lines);
+
     }, 1000)
 
   }

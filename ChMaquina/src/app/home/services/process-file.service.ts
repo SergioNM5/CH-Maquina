@@ -41,11 +41,10 @@ export class ProcessFileService {
         }
       }
     }
-
     fileCh._amountInst = listLines.length;
     fileCh.codeLines = listLines;
     fileCh.ipMemory = this.zeroFill(String(contId), 4);
-
+    fileCh.fpMemory = this.zeroFill(String(listLines.length + (+kernel)), 4);
     return fileCh;
   }
 
