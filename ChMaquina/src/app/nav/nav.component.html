@@ -23,9 +23,9 @@
       </button>
       <span class="title-nav">ChMaquina</span>
       <header class="header">
-        <button mat-raised-button class="button-nav">Encender</button>
-        <button mat-raised-button class="button-nav">Ejecutar programa</button>
-        <button mat-raised-button class="button-nav">Paso a Paso</button>
+        <button mat-raised-button class="button-nav" (click)="toggleEvent($event)"> {{ btnMessage }} </button>
+        <button mat-raised-button class="button-nav" [disabled]="!showEvent" style="">Ejecutar programa</button>
+        <button mat-raised-button class="button-nav" [disabled]="!showEvent">Paso a Paso</button>
       </header>
     </mat-toolbar>
     <!-- Add Content Here -->

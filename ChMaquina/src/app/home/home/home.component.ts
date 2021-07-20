@@ -1,25 +1,31 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { faCoffee, IconDefinition } from '@fortawesome/free-solid-svg-icons';
-import { toArray } from 'rxjs/operators';
 import { FileCH } from 'src/app/models/file-ch';
 import { ProcessFileService } from '../services/process-file.service';
+import { NavComponent } from '../../nav/nav.component';
+import { HelperService } from 'src/app/services/helper.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
 
   fileName: string = '';
-  fileCh: FileCH = new FileCH();
+  fileLoaded: any = '';
   file: any;
   lines: any[] = [];
-  kernel: number = 0;
-  memory: number = 0;
-  contId: number = 0;
+  kernel: number = 19;
+  memory: number = 100;
+  acumulador: number = 0;
+  contId: number = 1+this.kernel;
+  buttonState: boolean = false;
 
-  constructor( private processFile: ProcessFileService ) { }
+  constructor(
+    private processFile: ProcessFileService,
+    private helper: HelperService
+  ) { }
 
   onFileSelected(event: any) {
 
@@ -27,15 +33,13 @@ export class HomeComponent {
     this.fileName = event.target.files[0].name;
     let fileReader = new FileReader();
     fileReader.onload = (e) => {
-      this.fileCh.codeLines = fileReader.result;
+      this.fileLoaded = fileReader.result;
     }
     fileReader.readAsText(this.file);
     setTimeout(() => {
-      this.lines.push(this.processFile.transformFile(this.fileCh.codeLines, this.kernel, this.contId, this.lines.length, this.fileName)); //Lamar a una funcion en el servicio que retorne instancia de fileCh bien
+      this.lines.push(this.processFile.transformFile(this.fileLoaded, this.kernel, this.contId, this.lines.length, this.fileName)); //Lamar a una funcion en el servicio que retorne instancia de fileCh bien
       console.log(this.lines);
-    },1000)
-
-
+    }, 1000)
 
   }
 
@@ -45,5 +49,11 @@ export class HomeComponent {
 
   getMemory(event: any): void {
     this.memory = event.target.value;
+  }
+
+  ngOnInit() {
+    this.helper.currentShowEvent.subscribe(state => {
+      this.buttonState = state
+    });
   }
 }

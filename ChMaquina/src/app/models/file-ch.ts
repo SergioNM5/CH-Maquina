@@ -8,11 +8,11 @@ export class FileCH {
   // instructions amount
   _amountInst: number = 0;
   // initial position in memory
-  ipMemory: number = 0;
+  ipMemory: string = '';
   // final position in memory
-  fpMemory: number = 0;
+  fpMemory: string = '';
   // final position with variables in memory
-  fpvMemory: number = 0;
+  fpvMemory: string = '';
   // final position with variables in memory
   codeLines: any = '';
   tags: Tag[] = [];
