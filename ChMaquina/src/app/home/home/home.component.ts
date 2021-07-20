@@ -16,6 +16,7 @@ export class HomeComponent implements OnInit {
   kernel: number = 19;
   memory: number = 100;
   acumulador: number = 0;
+  idLines: number = 0;
   contId: number = 1+this.kernel;
   prueba: number = 1+this.kernel;
   buttonState: boolean = false;
@@ -39,13 +40,13 @@ export class HomeComponent implements OnInit {
       console.log(this.lines);
 
       //each file with their id lines
-      for(let i=this.acumulador; i<this.lines.length; i++) {
+      for(let i=this.idLines; i<this.lines.length; i++) {
         for(let j of this.lines[i].codeLines) {
           j.unshift(this.prueba);
           this.prueba++
         }
       }
-      this.acumulador++;
+      this.idLines++;
       console.log(this.lines);
 
     }, 1000)
