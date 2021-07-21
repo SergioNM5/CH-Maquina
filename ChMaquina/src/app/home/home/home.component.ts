@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ProcessFileService } from '../services/process-file.service';
 import { HelperService } from 'src/app/services/helper.service';
+import { CommunicationService } from 'src/app/services/communication.service';
 
 @Component({
   selector: 'app-home',
@@ -12,18 +13,17 @@ export class HomeComponent implements OnInit {
   fileName: string = '';
   fileLoaded: any = '';
   file: any;
-  lines: any[] = [];
+  filesArray: any[] = [];
   kernel: number = 19;
   memory: number = 100;
   acumulador: number = 0;
-  idLines: number = 0;
-  contId: number = 1+this.kernel;
-  prueba: number = 1+this.kernel;
+  contId: number = 1 + this.kernel;
   buttonState: boolean = false;
 
   constructor(
     private processFile: ProcessFileService,
-    private helper: HelperService
+    private helper: HelperService,
+    private communication: CommunicationService
   ) { }
 
   onFileSelected(event: any) {
@@ -36,25 +36,24 @@ export class HomeComponent implements OnInit {
     }
     fileReader.readAsText(this.file);
     setTimeout(() => {
-      this.lines.push(this.processFile.transformFile(this.fileLoaded, this.kernel, this.contId, this.lines.length, this.fileName)); //Lamar a una funcion en el servicio que retorne instancia de fileCh bien
-      console.log(this.lines);
-
-      //each file with their id lines
-      for(let i=this.idLines; i<this.lines.length; i++) {
-        for(let j of this.lines[i].codeLines) {
-          j.unshift(this.prueba);
-          this.prueba++
-        }
+      this.filesArray.push(this.processFile.transformFile(this.fileLoaded, this.kernel, this.contId, this.filesArray.length, this.fileName));
+      if (this.filesArray.length > 0) {
+        this.contId = +this.filesArray[this.filesArray.length - 1].fpvMemory + 1;
       }
-      this.idLines++;
-      console.log(this.lines);
-
+      if (this.filesArray[this.filesArray.length - 1].fpvMemory > this.memory) {
+        this.filesArray.pop();
+        alert('Capacidad de Memoria excedida');
+      }
+      this.loadInformation(this.filesArray);
     }, 1000)
-
+    setTimeout(() =>{
+      console.log(this.filesArray);
+    }, 1000);
   }
 
   getKernel(event: any): void {
     this.kernel = event.target.value;
+    this.contId = 1 + +this.kernel;
   }
 
   getMemory(event: any): void {
@@ -65,5 +64,9 @@ export class HomeComponent implements OnInit {
     this.helper.currentShowEvent.subscribe(state => {
       this.buttonState = state
     });
+  }
+
+  loadInformation(filesArray: any[]): void {
+    this.communication.showInfoEvent(filesArray);
   }
 }

@@ -35,7 +35,7 @@ export class NavComponent implements OnInit {
     if (this.showEvent) {
       this.btnMessage = 'Apagar';
     } else {
-      this.btnMessage = 'Encender';
+      window.location.reload();
     }
   }
 }

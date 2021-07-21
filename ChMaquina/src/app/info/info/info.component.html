@@ -3,16 +3,40 @@
     <div class="container__info container__table">
       <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
         <caption>Information</caption>
-        <!-- Position Column -->
-        <ng-container matColumnDef="position">
-          <th mat-header-cell *matHeaderCellDef> No. </th>
-          <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+        <!-- Id Column -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef> ID </th>
+          <td mat-cell *matCellDef="let element"> {{element.id}} </td>
         </ng-container>
 
-        <!-- Content Column -->
-        <ng-container matColumnDef="content">
-          <th mat-header-cell *matHeaderCellDef> Content </th>
-          <td mat-cell *matCellDef="let element"> {{element.content}} </td>
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> PROGRAMA </th>
+          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        </ng-container>
+
+         <!-- amount Inst Column -->
+         <ng-container matColumnDef="amountInst">
+          <th mat-header-cell *matHeaderCellDef> >= INS </th>
+          <td mat-cell *matCellDef="let element"> {{element.amountInst}} </td>
+        </ng-container>
+
+         <!-- ipMemory Column -->
+         <ng-container matColumnDef="ipMemory">
+          <th mat-header-cell *matHeaderCellDef> RB </th>
+          <td mat-cell *matCellDef="let element"> {{element.ipMemory}} </td>
+        </ng-container>
+
+         <!-- fpMemory Column -->
+         <ng-container matColumnDef="fpMemory">
+          <th mat-header-cell *matHeaderCellDef> RLC </th>
+          <td mat-cell *matCellDef="let element"> {{element.fpMemory}} </td>
+        </ng-container>
+
+         <!-- fpvMemory Column -->
+         <ng-container matColumnDef="fpvMemory">
+          <th mat-header-cell *matHeaderCellDef> RLP </th>
+          <td mat-cell *matCellDef="let element"> {{element.fpvMemory}} </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -26,6 +50,12 @@
         <ng-container matColumnDef="id">
           <th mat-header-cell *matHeaderCellDef> Id </th>
           <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
         </ng-container>
 
         <!-- Value Column -->
@@ -45,6 +75,12 @@
         <ng-container matColumnDef="id">
           <th mat-header-cell *matHeaderCellDef> Id </th>
           <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+        </ng-container>
+
+         <!-- Name Column -->
+         <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
         </ng-container>
 
         <!-- Value Column -->

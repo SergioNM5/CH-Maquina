@@ -1,15 +1,19 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FileCH } from 'src/app/models/file-ch';
+import { Tag } from 'src/app/models/tag';
+import { Variable } from 'src/app/models/variables';
+import { CheckSyntaxService } from './check-syntax.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProcessFileService {
 
-  constructor() { }
+  constructor(
+    private checkSyntax: CheckSyntaxService
+  ) { }
 
-  transformFile(contentFile: any, kernel: number, contId: number, id: number, fileName: string): any {
+  transformFile(contentFile: any, kernel: number, contId: number, id: number, fileName: string): FileCH | void {
     let fileCh: FileCH = new FileCH;
     fileCh._id = this.zeroFill(String(id), 4);
     fileCh._name = fileName;
@@ -42,10 +46,23 @@ export class ProcessFileService {
       }
     }
     fileCh._amountInst = listLines.length;
-    fileCh.codeLines = listLines;
+    fileCh.codeLines = <string[]>listLines;
     fileCh.ipMemory = this.zeroFill(String(contId), 4);
-    fileCh.fpMemory = this.zeroFill(String(listLines.length + (+kernel)), 4);
-    return fileCh;
+    fileCh.fpMemory = this.zeroFill(String((fileCh._amountInst - 1) + (+contId)), 4);
+
+    let resultSyntax: [Tag[], Variable[], string[]] = this.checkSyntax.checkSyntax(fileCh.codeLines);
+
+    fileCh.tags = resultSyntax[0];
+    fileCh.variables = resultSyntax[1];
+    fileCh.fpvMemory = this.zeroFill(String(+fileCh.fpMemory + fileCh.variables.length), 4);
+
+    if (resultSyntax[2].length > 0) {
+      for (let err = 0; err < resultSyntax[2].length; err++) {
+        alert(resultSyntax[2][err]);
+      }
+    } else {
+      return fileCh;
+    }
   }
 
   zeroFill(number: string, width: number) {

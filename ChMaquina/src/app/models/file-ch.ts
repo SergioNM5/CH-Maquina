@@ -1,5 +1,5 @@
-import { variables } from "../info/info/info.component";
 import { Tag } from "./tag";
+import { Variable } from "./variables";
 
 
 export class FileCH {
@@ -14,9 +14,9 @@ export class FileCH {
   // final position with variables in memory
   fpvMemory: string = '';
   // final position with variables in memory
-  codeLines: any = '';
+  codeLines: string[] = [];
   tags: Tag[] = [];
-  variables: variables[] = [];
+  variables: Variable[] = [];
 
   constructor() {
   }

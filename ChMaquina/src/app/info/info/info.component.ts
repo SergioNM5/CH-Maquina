@@ -1,34 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
-export interface documentLines {
-  position: number;
-  content: string;
-}
-
-export interface variables {
-  id: number;
-  value: string;
-}
-
-export interface tags {
-  id: number;
-  value: string;
-}
-
-const DATA: documentLines[] = [
-  {position: 1, content: 'Line 1'},
-  {position: 2, content: 'Line 2'}
-]
-
-const DATA_VARIABLES: variables[] = [
-  {id: 1, value: 'v1'},
-  {id: 2, value: 'v2'},
-]
-
-const DATA_TAGS: tags[] = [
-  {id: 1, value: 't1'},
-  {id: 2, value: 't2'},
-]
+import { CommunicationService } from 'src/app/services/communication.service';
 
 @Component({
   selector: 'app-info',
@@ -37,18 +8,55 @@ const DATA_TAGS: tags[] = [
 })
 export class InfoComponent implements OnInit {
 
-  displayedColumns: string[] = ['position', 'content'];
-  dataSource = DATA;
+  filesArray: any[] = [];
+  DATA: any[] = [];
+  DATA_TAGS: any[] = [];
+  DATA_VARIABLES: any[] = [];
 
-  columnsVar: string[] = ['id', 'value'];
-  dataVar = DATA_VARIABLES;
+  displayedColumns: string[] = ['id','name','amountInst','ipMemory','fpMemory','fpvMemory'];
+  dataSource = this.DATA;
 
-  columnsTag: string[] = ['id', 'value'];
-  dataTag = DATA_TAGS;
+  columnsTag: string[] = ['id', 'name', 'value'];
+  dataTag = this.DATA_TAGS;
 
-  constructor() { }
+  columnsVar: string[] = ['id', 'name', 'value'];
+  dataVar = this.DATA_VARIABLES;
 
-  ngOnInit(): void {
+  constructor(
+    private communication: CommunicationService
+  ) { }
+
+  ngOnInit() {
+    this.communication.currentShowEvent.subscribe(state => {
+      this.filesArray = state
+      for (let file of this.filesArray) {
+        let information = {
+          id: file._id,
+          name: file._name,
+          amountInst: file._amountInst,
+          ipMemory: file.ipMemory,
+          fpMemory: file.fpMemory,
+          fpvMemory: file.fpvMemory
+        };
+        for (let fileTag of file.tags) {
+          let tag = {
+            id: fileTag.id,
+            name: fileTag.name,
+            value: fileTag.value
+          }
+          this.DATA_TAGS.push(tag);
+        };
+        for (let fileVar of file.variables) {
+          let variable = {
+            id: fileVar.id,
+            name: fileVar.name,
+            value: fileVar.value
+          }
+          this.DATA_VARIABLES.push(variable);
+        }
+
+        this.DATA.push(information);
+      }
+    });
   }
-
 }

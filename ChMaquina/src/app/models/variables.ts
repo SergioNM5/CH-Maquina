@@ -1,4 +1,5 @@
-export interface Variables {
-  id: Number;
+export interface Variable {
+  id: number;
   name: string;
+  value: string;
 }

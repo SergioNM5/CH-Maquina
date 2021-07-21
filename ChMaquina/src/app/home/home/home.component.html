@@ -19,7 +19,7 @@
       <div class="file-upload">
 
         <button mat-mini-fab color="primary" class="upload-btn"
-          (click)="fileUpload.click()">
+          (click)="fileUpload.click()" [disabled]='!buttonState'>
             <mat-icon>attach_file</mat-icon>
         </button>
         {{fileName || "Upload file .ch"}}
