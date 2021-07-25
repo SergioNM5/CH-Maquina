@@ -51,18 +51,21 @@ main {
     background-repeat: no-repeat;
     display: flex;
     justify-content: center;
-    @media (min-width: 800px) {
-    }
     &__text {
       width: 60%;
       height: 50%;
       margin-top: 50px;
       color: #683bb6;
+      display: flex;
+      justify-content: center;
       p {
         padding: 10px;
       }
       @media (min-width: 800px) {
         width: 10%;
+      }
+      @media (min-width: 1700px) {
+        padding: 20px;
       }
     }
   }
