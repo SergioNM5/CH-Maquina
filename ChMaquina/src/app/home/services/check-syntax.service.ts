@@ -31,7 +31,7 @@ export class CheckSyntaxService {
       if (codeLines[instruccion][0].trim().toLowerCase() == 'nueva') {
 
         let variable: Variable = {
-          id: 0,
+          id: '',
           name: '',
           value: ''
         };
@@ -169,7 +169,7 @@ export class CheckSyntaxService {
       } else if (codeLines[instruccion][0].trim().toLowerCase() == 'etiqueta') {
 
         let tag: Tag = {
-          id: 0,
+          id: '',
           name: '',
           value: ''
         };

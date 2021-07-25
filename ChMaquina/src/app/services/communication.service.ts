@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { FileCH } from '../models/file-ch';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class CommunicationService {
 
   constructor() { }
 
-  showInfoEvent(filesArray: any[]) {
-    this.showEvent.next(filesArray);
+  showInfoEvent(fileCh: any[]) {
+    this.showEvent.next(fileCh);
   }
 }

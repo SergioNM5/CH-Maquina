@@ -53,7 +53,7 @@ export class InfoComponent implements OnInit {
             value: fileVar.value
           }
           this.DATA_VARIABLES.push(variable);
-        }
+        };
 
         this.DATA.push(information);
       }

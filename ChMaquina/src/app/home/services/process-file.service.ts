@@ -1,3 +1,4 @@
+import { variable } from '@angular/compiler/src/output/output_ast';
 import { Injectable } from '@angular/core';
 import { FileCH } from 'src/app/models/file-ch';
 import { Tag } from 'src/app/models/tag';
@@ -55,6 +56,13 @@ export class ProcessFileService {
     fileCh.tags = resultSyntax[0];
     fileCh.variables = resultSyntax[1];
     fileCh.fpvMemory = this.zeroFill(String(+fileCh.fpMemory + fileCh.variables.length), 4);
+
+    for (let tag of fileCh.tags) {
+      tag.id = fileCh._id;
+    }
+    for (let variable of fileCh.variables) {
+      variable.id = fileCh._id;
+    }
 
     if (resultSyntax[2].length > 0) {
       for (let err = 0; err < resultSyntax[2].length; err++) {

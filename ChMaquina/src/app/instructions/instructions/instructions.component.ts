@@ -1,30 +1,45 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTable } from '@angular/material/table';
-import { InstructionsDataSource, InstructionsItem } from './instructions-datasource';
+import { Component, OnInit } from '@angular/core';
+import { ProcessFileService } from 'src/app/home/services/process-file.service';
+import { CommunicationService } from 'src/app/services/communication.service';
 
 @Component({
   selector: 'app-instructions',
   templateUrl: './instructions.component.html',
   styleUrls: ['./instructions.component.scss']
 })
-export class InstructionsComponent implements AfterViewInit {
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatTable) table!: MatTable<InstructionsItem>;
-  dataSource: InstructionsDataSource;
+export class InstructionsComponent implements OnInit {
 
-  /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['id', 'name'];
+  filesArray: any[] = [];
+  DATA_INSTRUCTIONS: any[] = [];
 
-  constructor() {
-    this.dataSource = new InstructionsDataSource();
+  displayedColumns: string[] = ['id', 'instructions'];
+  dataSource = this.DATA_INSTRUCTIONS;
+
+  constructor(
+    private communication: CommunicationService,
+    private processFile: ProcessFileService
+  ) { }
+
+  ngOnInit(): void {
+    this.communication.currentShowEvent.subscribe(state => {
+      this.filesArray = state
+      for (let file of this.filesArray) {
+        let linesSpaced: string[] = [];
+        for (let i of file.codeLines) {
+          linesSpaced.push(i.join(' '));
+        }
+        let lineController: number = 0;
+        for (let line = +file.ipMemory; line <= +file.fpMemory; line++) {
+          let instructionsInfo = {
+            id: this.processFile.zeroFill(String(line), 4),
+            instructions: linesSpaced[lineController]
+          };
+          this.DATA_INSTRUCTIONS.push(instructionsInfo);
+          lineController++;
+        }
+        console.log(this.DATA_INSTRUCTIONS);
+      }
+    });
   }
 
-  ngAfterViewInit(): void {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
-    this.table.dataSource = this.dataSource;
-  }
 }

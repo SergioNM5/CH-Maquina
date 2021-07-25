@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProcessFileService } from '../services/process-file.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { CommunicationService } from 'src/app/services/communication.service';
+import { state } from '@angular/animations';
 
 @Component({
   selector: 'app-home',
@@ -27,7 +28,11 @@ export class HomeComponent implements OnInit {
   ) { }
 
   onFileSelected(event: any) {
-
+    this.communication.currentShowEvent.subscribe(state => {
+      this.filesArray = state;
+      this.contId = (this.filesArray[this.filesArray.length - 1])!=undefined ?
+      +this.filesArray[this.filesArray.length - 1].fpvMemory + 1 : 1 + this.kernel;
+    });
     this.file = event.target.files[0];
     this.fileName = event.target.files[0].name;
     let fileReader = new FileReader();
