@@ -7,12 +7,21 @@ import { FileCH } from '../models/file-ch';
 })
 export class CommunicationService {
 
+  // Files Array Observable
   private showEvent = new BehaviorSubject<any[]>([]);
   currentShowEvent = this.showEvent.asObservable();
+
+  // Acumulator, Kernel and Memory Array Observable
+  private inputs = new BehaviorSubject<number[]>([0,0,0]);
+  currentInputs = this.inputs.asObservable();
 
   constructor() { }
 
   showInfoEvent(fileCh: any[]) {
     this.showEvent.next(fileCh);
+  }
+
+  showInputs(inputs: number[]) {
+    this.inputs.next(inputs);
   }
 }

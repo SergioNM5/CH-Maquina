@@ -17,7 +17,7 @@ export class HomeComponent implements OnInit {
   filesArray: any[] = [];
   kernel: number = 19;
   memory: number = 100;
-  acumulador: number = 0;
+  acumulator: number = 0;
   contId: number = 1 + this.kernel;
   buttonState: boolean = false;
 
@@ -50,9 +50,10 @@ export class HomeComponent implements OnInit {
         alert('Capacidad de Memoria excedida');
       }
       this.loadInformation(this.filesArray);
+      this.loadInputs([this.acumulator, this.kernel, this.memory]);
     }, 1000)
     setTimeout(() =>{
-      console.log(this.filesArray);
+      console.log(this.filesArray); // Quitar
     }, 1000);
   }
 
@@ -73,5 +74,9 @@ export class HomeComponent implements OnInit {
 
   loadInformation(filesArray: any[]): void {
     this.communication.showInfoEvent(filesArray);
+  }
+
+  loadInputs(inputs: number[]): void {
+    this.communication.showInputs(inputs);
   }
 }

@@ -1,12 +1,11 @@
 .container {
   width: 80%;
-  margin: 20px auto;
+  height: 80vh;
+  margin: 50px auto;
   display: flex;
   flex-direction: column;
+  overflow: scroll;
 
-  &__text {
-    width: 100%;
-  }
 
   table{
     width: 100%;

@@ -37,7 +37,6 @@ export class InstructionsComponent implements OnInit {
           this.DATA_INSTRUCTIONS.push(instructionsInfo);
           lineController++;
         }
-        console.log(this.DATA_INSTRUCTIONS);
       }
     });
   }
