@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FileCH } from 'src/app/models/file-ch';
+import { Variable } from 'src/app/models/variables';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,10 @@ export class RunProcessService {
 
   constructor() { }
 
-  runProgram(fileCh: FileCH, acumulador: string) {
+  runProgram(fileCh: FileCH, acumulador: string): [FileCH, any[], any[]] {
+
+    let listToShow: any[] = [];
+    let listToPrint: any[] = [];
 
     for (let instruccion = 0; instruccion < fileCh.codeLines.length; instruccion++) {
 
@@ -27,7 +31,7 @@ export class RunProcessService {
         for (let variable = 0; variable < fileCh.variables.length; variable++) {
 
           if (fileCh.codeLines[instruccion][1] === fileCh.variables[variable].name) {
-            fileCh.variables[variable].value = String(acumulador);
+            fileCh.variables[variable].value = String(Number(acumulador));
           }
 
         }
@@ -37,7 +41,7 @@ export class RunProcessService {
         for (let variable = 0; variable < fileCh.variables.length; variable++) {
 
           if (fileCh.codeLines[instruccion][1] === fileCh.variables[variable].name) {
-            acumulador = String(Number(acumulador) - Number(fileCh.variables[variable].value));
+            acumulador = String(Number(Number(acumulador)) - Number(fileCh.variables[variable].value));
           } else if (fileCh.codeLines[instruccion][1] === 'acumulador') {
             acumulador = '0';
           }
@@ -49,7 +53,7 @@ export class RunProcessService {
         for (let variable = 0; variable < fileCh.variables.length; variable++) {
 
           if (fileCh.codeLines[instruccion][1] == fileCh.variables[variable].name) {
-            acumulador = String(Number(acumulador) * Number(fileCh.variables[variable].value));
+            acumulador = String(Number(Number(acumulador)) * Number(fileCh.variables[variable].value));
           }
 
         }
@@ -61,7 +65,7 @@ export class RunProcessService {
           if (fileCh.codeLines[instruccion][1] === fileCh.tags[variable].name && +fileCh.tags[variable].value < fileCh.codeLines.length) {
 
             if (+fileCh.tags[variable].value <= instruccion) {
-              instruccion = Number(+fileCh.tags[variable].value); //posible -1 o -2
+              instruccion = Number(+fileCh.tags[variable].value) - 2;
             }
 
           }
@@ -70,22 +74,22 @@ export class RunProcessService {
 
       } else if (fileCh.codeLines[instruccion][0].trim().toLowerCase() == 'vayasi') {
 
-        if (acumulador > 0) {
+        if (Number(acumulador) > 0) {
 
-          for (let variable = 0; variable < nombreEtiqueta.length; variable++) {
-
-            if (fileCh.codeLines[instruccion][1] == nombreEtiqueta[variable] && +fileCh.tags[variable].value < fileCh.codeLines.length - 1) {
-              instruccion = Number(+fileCh.tags[variable].value) - 2;
+          for (let variable = 0; variable < fileCh.tags.length; variable++) {
+            
+            if (fileCh.codeLines[instruccion][1] === fileCh.tags[variable].name && +fileCh.tags[variable].value < fileCh.codeLines.length - 1) {
+              instruccion = Number(fileCh.tags[variable].value) - 2;
             }
 
           }
 
-        } else if (acumulador < 0) {
+        } else if (Number(acumulador) < 0) {
 
-          for (let variable = 0; variable < nombreEtiqueta.length; variable++) {
+          for (let variable = 0; variable < fileCh.tags.length; variable++) {
 
-            if (fileCh.codeLines[instruccion][2] == nombreEtiqueta[variable] && +fileCh.tags[variable].value < fileCh.codeLines.length) {
-              instruccion = Number(+fileCh.tags[variable].value) - 2;
+            if (fileCh.codeLines[instruccion][2] == fileCh.tags[variable].name && +fileCh.tags[variable].value < fileCh.codeLines.length) {
+              instruccion = Number(+fileCh.tags[variable].value);// posible -1 or -2
             }
 
           }
@@ -94,15 +98,13 @@ export class RunProcessService {
       } else if (fileCh.codeLines[instruccion][0].trim().toLowerCase() == 'muestre') {
 
         if (fileCh.codeLines[instruccion][1] == "acumulador") {
-          listaMostrar.push(acumulador);
-          screenContent.innerHTML = `El valor de ${fileCh.codeLines[instruccion][1]} es ${listaMostrar}`;
+          listToShow.push([fileCh._name, `El valor del acumulador es ${acumulador}`]);
         } else {
 
           for (let variable = 0; variable < fileCh.variables.length; variable++) {
 
             if (fileCh.codeLines[instruccion][1] == fileCh.variables[variable].name) {
-              listaMostrar.push(fileCh.variables[variable].value);
-              screenContent.innerHTML = `El valor de ${fileCh.codeLines[instruccion][1]} es ${listaMostrar.join(" ")}`;
+              listToShow.push([fileCh._name, `El valor de ${fileCh.variables[variable].name} es ${fileCh.variables[variable].value}`]);
             }
 
           }
@@ -114,8 +116,8 @@ export class RunProcessService {
         for (let variable = 0; variable < fileCh.variables.length; variable++) {
 
           if (fileCh.codeLines[instruccion][1] == fileCh.variables[variable].name) {
-            let nuevoValor = prompt(`Ingrese el valor de la variable ${fileCh.codeLines[instruccion][1]}`);
-            fileCh.variables[variable].value = Number(nuevoValor);
+            let newValue = prompt(`Ingrese el valor de la variable ${fileCh.variables[variable].name}`);
+            fileCh.variables[variable].value = String(newValue);
           }
 
         }
@@ -125,7 +127,7 @@ export class RunProcessService {
         for (let variable = 0; variable < fileCh.variables.length; variable++) {
 
           if (fileCh.codeLines[instruccion][1] == fileCh.variables[variable].name) {
-            acumulador = acumulador + Number(fileCh.variables[variable].value);
+            acumulador = String(Number(acumulador) + Number(fileCh.variables[variable].value));
           }
 
         }
@@ -135,7 +137,7 @@ export class RunProcessService {
         for (let variable = 0; variable < fileCh.variables.length; variable++) {
 
           if (fileCh.codeLines[instruccion][1] == fileCh.variables[variable].name) {
-            acumulador = acumulador / Number(fileCh.variables[variable].value);
+            acumulador = String(Number(acumulador) / Number(fileCh.variables[variable].value));
           }
 
         }
@@ -146,8 +148,8 @@ export class RunProcessService {
 
         for (let variable = 0; variable < fileCh.variables.length; variable++) {
 
-          if (fileCh.codeLines[instruccion][1] == fileCh.variables[variable].name && fileCh.variables[variable].value.isInteger()) {
-            acumulador = acumulador ** Number(fileCh.variables[variable].value);
+          if (fileCh.codeLines[instruccion][1] == fileCh.variables[variable].name) {
+            acumulador = String(Number(acumulador) ** Number(fileCh.variables[variable].value));
           }
 
         }
@@ -160,8 +162,8 @@ export class RunProcessService {
 
           if (fileCh.codeLines[instruccion][1] == fileCh.variables[variable].name) {
 
-            let modulo = Number(acumulador) % Number(fileCh.variables[variable].value);
-            alert(`El modulo de ${acumulador} % ${v.valor} es igual a: ${modulo}`);
+            let modulo: number = Number(acumulador) % Number(fileCh.variables[variable].value);
+            alert(`El modulo de ${acumulador} % ${fileCh.variables[variable].value} es igual a: ${modulo}`);
 
           }
 
@@ -172,23 +174,14 @@ export class RunProcessService {
         for (let variable = 0; variable < fileCh.variables.length; variable++) {
 
           if (fileCh.codeLines[instruccion][1] == fileCh.variables[variable].name) {
-
-            let cadena = acumulador + " " + fileCh.variables[variable].value;
-            sectionAcumulador.type = 'text';
-            acumulador = cadena;
-
-
-
+            acumulador = `${acumulador} ${fileCh.variables[variable].value}`;
           }
 
         }
 
       } else if (fileCh.codeLines[instruccion][0].trim().toLowerCase() == 'elimine') {
 
-        let eliminar = fileCh.codeLines[instruccion][1];
-        acumulador = acumulador.replaceAll(eliminar, "");
-
-
+        acumulador = acumulador.replace(fileCh.codeLines[instruccion][1], "");
 
       } else if (fileCh.codeLines[instruccion][0].trim().toLowerCase() == 'extraiga') {
 
@@ -196,29 +189,27 @@ export class RunProcessService {
         for (let variable = 0; variable < Number(fileCh.codeLines[instruccion][1]); variable++) {
           extraer.push(acumulador[variable]);
         }
-        acumulador = extraer.join("");
+        acumulador = extraer.join(" ");
 
+      } else if (fileCh.codeLines[instruccion][0].trim().toUpperCase() == 'Y') {
 
-
-      } else if (fileCh.codeLines[instruccion][0].trim().toLowerCase() == 'Y') {
-
-        let primerOperando = 0;
-        let segundoOperando = 0;
+        let primerOperando: number = 0;
+        let segundoOperando: number = 0;
 
         for (let variable = 0; variable < fileCh.variables.length; variable++) {
 
-          if (fileCh.codeLines[instruccion][1] == fileCh.variables[variable].name) {
-            primerOperando = fileCh.variables[variable].value;
+          if (fileCh.codeLines[instruccion][1] === fileCh.variables[variable].name) {
+            primerOperando = Number(fileCh.variables[variable].value);
           }
-          if (fileCh.codeLines[instruccion][2] == fileCh.variables[variable].name) {
-            primerOperando = fileCh.variables[variable].value;
+          if (fileCh.codeLines[instruccion][2] === fileCh.variables[variable].name) {
+            segundoOperando = Number(fileCh.variables[variable].value);
           }
-          if (fileCh.codeLines[instruccion][3] == fileCh.variables[variable].name) {
+          if (fileCh.codeLines[instruccion][3] === fileCh.variables[variable].name) {
 
-            if (primerOperando && segundoOperando == 1) {
-              fileCh.variables[variable].value = 1;
-            } else if (primerOperando && segundoOperando == 0) {
-              fileCh.variables[variable].value = 0;
+            if (primerOperando === 1 && segundoOperando === 1) {
+              fileCh.variables[variable].value = '1';
+            } else {
+              fileCh.variables[variable].value = '0';
             }
 
           }
@@ -227,23 +218,23 @@ export class RunProcessService {
 
       } else if (fileCh.codeLines[instruccion][0].trim().toLowerCase() == 'O') {
 
-        let primerOperando = 0;
-        let segundoOperando = 0;
+        let primerOperando: number = 0;
+        let segundoOperando: number = 0;
 
         for (let variable = 0; variable < fileCh.variables.length; variable++) {
 
-          if (fileCh.codeLines[instruccion][1] == fileCh.variables[variable].name) {
-            primerOperando = fileCh.variables[variable].value;
+          if (fileCh.codeLines[instruccion][1] === fileCh.variables[variable].name) {
+            primerOperando = Number(fileCh.variables[variable].value);
           }
-          if (fileCh.codeLines[instruccion][2] == fileCh.variables[variable].name) {
-            primerOperando = fileCh.variables[variable].value;
+          if (fileCh.codeLines[instruccion][2] === fileCh.variables[variable].name) {
+            segundoOperando = Number(fileCh.variables[variable].value);
           }
-          if (fileCh.codeLines[instruccion][3] == fileCh.variables[variable].name) {
+          if (fileCh.codeLines[instruccion][3] === fileCh.variables[variable].name) {
 
-            if (primerOperando || segundoOperando == 1) {
-              fileCh.variables[variable].value = 1;
-            } else if (primerOperando || segundoOperando == 0) {
-              fileCh.variables[variable].value = 0;
+            if (primerOperando === 0 || segundoOperando === 0) {
+              fileCh.variables[variable].value = '0';
+            } else {
+              fileCh.variables[variable].value = '0';
             }
 
           }
@@ -252,58 +243,43 @@ export class RunProcessService {
 
       } else if (fileCh.codeLines[instruccion][0].trim().toLowerCase() == 'NO') {
 
-      } else if (fileCh.codeLines[instruccion][0].trim().toLowerCase() == 'muestre') {
-
-        if (fileCh.codeLines[instruccion][1] == "acumulador") {
-          listaMostrar.push(acumulador);
-          screenContent.innerHTML = `El valor de ${fileCh.codeLines[instruccion][2]} es igual a: ${listaMostrar}`;
-        } else {
-
-          for (let variable = 0; variable < fileCh.variables.length; variable++) {
-
-            if (fileCh.codeLines[instruccion][1] == fileCh.variables[variable].name) {
-              listaMostrar.push(fileCh.variables[variable].value)
-              screenContent.innerHTML = `El valor de ${fileCh.codeLines[instruccion][2]} es igual a: ${listaMostrar.join(" ")}`;
+        let guardarResultado: number = 0;
+        for (let variable of fileCh.variables) {
+          if (fileCh.codeLines[instruccion][1].trim() === variable.name) {
+            if (variable.value === '0') {
+              guardarResultado = 1;
+            } else {
+              guardarResultado = 0;
             }
-
           }
-
         }
+        for (let variable of fileCh.variables) {
+          if (fileCh.codeLines[instruccion][2].trim() === variable.name) {
+              variable.value = String(guardarResultado);
+          }
+      }
 
       } else if (fileCh.codeLines[instruccion][0].trim().toLowerCase() == 'imprima') {
 
         if (fileCh.codeLines[instruccion][1] == "acumulador") {
-          listaImprimir.push(acumulador);
-          printContent.innerHTML = `El valor de ${fileCh.codeLines[instruccion][1]} es igual a: ${listaImprimir}`;
+          listToPrint.push([fileCh._name, `El valor del acumulador es ${acumulador}`]);
         } else {
 
           for (let variable = 0; variable < fileCh.variables.length; variable++) {
 
             if (fileCh.codeLines[instruccion][1] == fileCh.variables[variable].name) {
-              listaImprimir.push(fileCh.variables[variable].value)
-              printContent.innerHTML = `El valor de ${fileCh.codeLines[instruccion][1]} es igual a: ${listaImprimir.join(" ")}`;
+              listToPrint.push([fileCh._name, `El valor de ${fileCh.variables[variable].name} es ${fileCh.variables[variable].value}`]);
             }
 
           }
 
         }
       }
-      // console.log(instruccion + 1);
-      // console.log("acumulador: " + acumulador);
-      // console.log("listaVariables: " + listaValoresVariablesGeneral[contList]);
-      // console.log(fileCh.codeLines[instruccion]);
-      // console.log("etiquetas: " + contadorEtiquetas);
-      // console.log("___________")
-      console.log(longitudesProgramas);
-      console.log(contInst);
-      mostrarMemoria(memoriaContenido, listaValoresVariablesGeneral[contList]);
-      if ((contInst == Number(longitudesProgramas[contLong]) - 1) && (listaValoresVariablesGeneral[contList + 1] != undefined)) {
-        contList += 1;
-        contLong += 1;
-        contInst = 0;
-      }
-      contInst += 1;
+
     }
+
+    return [fileCh, listToShow, listToPrint];
+
   }
 
 }

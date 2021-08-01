@@ -4,45 +4,47 @@
       <div class="inputs__div">
         <mat-form-field>
           <mat-label>Kernel</mat-label>
-            <input matInput type="number" placeholder="Kernel" id="kernel" (change)="getKernel($event)" [value]='kernel' [disabled]='buttonState'>
+          <input matInput type="number" placeholder="Kernel" id="kernel" (change)="getKernel($event)" [value]='kernel'
+            [disabled]='buttonState'>
         </mat-form-field>
       </div>
       <div class="inputs__div">
         <mat-form-field>
           <mat-label>Memoria</mat-label>
-            <input matInput type="number" placeholder="Memoria" id='memory' (change)="getMemory($event)" [value]='memory' [disabled]='buttonState'>
+          <input matInput type="number" placeholder="Memoria" id='memory' (change)="getMemory($event)" [value]='memory'
+            [disabled]='buttonState'>
         </mat-form-field>
       </div>
     </div>
     <div class="inputFile">
-      <input type="file" class="fileInput" (change)='onFileSelected($event)' #fileUpload >
+      <input type="file" class="fileInput" (change)='onFileSelected($event)' #fileUpload>
       <div class="file-upload">
 
-        <button mat-mini-fab color="primary" class="upload-btn"
-          (click)="fileUpload.click()" [disabled]='!buttonState'>
-            <mat-icon>attach_file</mat-icon>
+        <button mat-mini-fab color="primary" class="upload-btn" (click)="fileUpload.click()" [disabled]='!buttonState'>
+          <mat-icon>attach_file</mat-icon>
         </button>
         {{fileName || "Upload file .ch"}}
 
-     </div>
+      </div>
     </div>
     <mat-card>
       <div class="periferics">
         <div class="monitor">
-          <div class="monitor__text">
-            <p> I am a monitor aaaaaaaaaaaa</p>
+          <img src="../../../assets/fca94042113e17fcb564441a5ed00c15.png" alt="monitor">
+          <div id="monitor" class="monitor__text">
+            I am a monitor aaaaaaaaaaaa
           </div>
         </div>
         <div class="print">
           <div class="print__icon">
             <span class="material-icons">
               print
-              </span>
+            </span>
           </div>
           <div class="print__title">
             print
           </div>
-          <div class="print__text">
+          <div id="printer" class="print__text">
             Area de texto
           </div>
         </div>

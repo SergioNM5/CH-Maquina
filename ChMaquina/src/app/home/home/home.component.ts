@@ -3,6 +3,7 @@ import { ProcessFileService } from '../services/process-file.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { CommunicationService } from 'src/app/services/communication.service';
 import { state } from '@angular/animations';
+import { RunProcessService } from '../services/run-process.service';
 
 @Component({
   selector: 'app-home',
@@ -17,21 +18,23 @@ export class HomeComponent implements OnInit {
   filesArray: any[] = [];
   kernel: number = 19;
   memory: number = 100;
-  acumulator: number = 0;
+  acumulator: string = '0';
   contId: number = 1 + this.kernel;
   buttonState: boolean = false;
+  fileToRun: number = 0;
 
   constructor(
     private processFile: ProcessFileService,
     private helper: HelperService,
-    private communication: CommunicationService
+    private communication: CommunicationService,
+    private runProcess: RunProcessService
   ) { }
 
   onFileSelected(event: any) {
     this.communication.currentShowEvent.subscribe(state => {
       this.filesArray = state;
-      this.contId = (this.filesArray[this.filesArray.length - 1])!=undefined ?
-      +this.filesArray[this.filesArray.length - 1].fpvMemory + 1 : 1 + this.kernel;
+      this.contId = (this.filesArray[this.filesArray.length - 1]) != undefined ?
+        +this.filesArray[this.filesArray.length - 1].fpvMemory + 1 : 1 + this.kernel;
     });
     this.file = event.target.files[0];
     this.fileName = event.target.files[0].name;
@@ -50,9 +53,9 @@ export class HomeComponent implements OnInit {
         alert('Capacidad de Memoria excedida');
       }
       this.loadInformation(this.filesArray);
-      this.loadInputs([this.acumulator, this.kernel, this.memory]);
+      this.loadInputs([+this.acumulator, this.kernel, this.memory]);
     }, 1000)
-    setTimeout(() =>{
+    setTimeout(() => {
       console.log(this.filesArray); // Quitar
     }, 1000);
   }
@@ -68,7 +71,27 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.helper.currentShowEvent.subscribe(state => {
-      this.buttonState = state
+      this.buttonState = state;
+    });
+    this.helper.currentFileToRun.subscribe(value => {
+      this.fileToRun = value;
+      if (this.filesArray.length !== 0) {
+        [this.filesArray[this.fileToRun], this.filesArray[this.fileToRun].listToShow, this.filesArray[this.fileToRun].listToPrint] = this.runProcess.runProgram(this.filesArray[this.fileToRun], this.acumulator);
+        let monitor: any = document.getElementById("monitor");
+        monitor.innerHTML = "";
+        let listMessageToShow: string[] = [];
+        for (let message of this.filesArray[this.fileToRun].listToShow) {
+          listMessageToShow.push(`${message[0]}: ${message[1]}`);
+        }
+        monitor.innerHTML = listMessageToShow.join('<br></br>');
+        let printer: any = document.getElementById("printer")
+        printer.innerHTML = "";
+        let listMessageToPrint: string[] = [];
+        for (let message of this.filesArray[this.fileToRun].listToPrint) {
+          listMessageToPrint.push(`${message[0]}: ${message[1]}`);
+        }
+        printer.innerHTML = listMessageToPrint.join('<br></br>');
+      }
     });
   }
 

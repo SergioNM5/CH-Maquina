@@ -1,8 +1,9 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { HelperService } from '../services/helper.service';
+import { CommunicationService } from '../services/communication.service';
 
 @Component({
   selector: 'app-nav',
@@ -18,15 +19,25 @@ export class NavComponent implements OnInit {
     );
 
   showEvent: boolean = false;
+  enableButtons: boolean = false;
   btnMessage: string = 'Encender';
+  filesArray: any[] = [];
+  fileToRun: number = 0;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private helper: HelperService
+    private helper: HelperService,
+    private communication: CommunicationService
   ) { }
 
   ngOnInit() {
     this.helper.currentShowEvent.subscribe(showEvent => this.showEvent = showEvent);
+    this.communication.currentShowEvent.subscribe(state => {
+      this.filesArray = state;
+      if (this.filesArray.length > 0) {
+        this.enableButtons = true;
+      }
+    });
   }
 
   toggleEvent(event: any): void {
@@ -37,5 +48,10 @@ export class NavComponent implements OnInit {
     } else {
       window.location.reload();
     }
+  }
+
+  runEvent(event: any): void {
+    this.helper.editFileToRunEvent(this.fileToRun);
+    this.fileToRun++;
   }
 }

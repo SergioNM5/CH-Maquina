@@ -17,6 +17,10 @@ export class FileCH {
   codeLines: string[] = [];
   tags: Tag[] = [];
   variables: Variable[] = [];
+  // list to show
+  listToShow: any[] = [];
+  // list to print
+  listToPrint: any[] = [];
 
   constructor() {
   }
