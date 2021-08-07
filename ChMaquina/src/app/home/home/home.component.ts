@@ -59,10 +59,7 @@ export class HomeComponent implements OnInit {
       }
       this.loadInformation(this.filesArray);
       this.loadInputs([+this.acumulator, this.kernel, this.memory]);
-    }, 1000)
-    setTimeout(() => {
-      console.log(this.filesArray); // Quitar
-    }, 1000);
+    }, 500);
   }
 
   getKernel(event: any): void {
@@ -80,7 +77,7 @@ export class HomeComponent implements OnInit {
     });
     this.helper.currentFileToRun.subscribe(value => {
       this.fileToRun = value;
-      if (this.filesArray.length !== 0) {
+      if (this.filesArray.length !== 0 && this.fileToRun < this.filesArray.length) {
         [this.filesArray[this.fileToRun], this.filesArray[this.fileToRun].listToShow, this.filesArray[this.fileToRun].listToPrint] = this.runProcess.runProgram(this.filesArray[this.fileToRun], this.acumulator);
         let monitor: any = document.getElementById("monitor");
         monitor.innerHTML = "";
@@ -98,7 +95,7 @@ export class HomeComponent implements OnInit {
         printer.innerHTML = listMessageToPrint.join('<br></br>');
       }
     });
-    this.helper.currentAmountSteptoStep.subscribe(amount => {
+    this.helper.currentAmountSteptoStep.subscribe(() => {
       if(this.filesArray.length !== 0 && this.amountSteptoStep < this.filesArray[this.filesControllerSts].codeLines.length) {
         [this.filesArray[this.filesControllerSts], this.filesArray[this.filesControllerSts].listToShow, this.filesArray[this.filesControllerSts].listToPrint, this.acumulator, this.amountSteptoStep] = this.step.stepToStep(this.filesArray[this.filesControllerSts], this.acumulator, this.amountSteptoStep);
         this.loadInputs([+this.acumulator, this.kernel, this.memory]);
@@ -131,6 +128,5 @@ export class HomeComponent implements OnInit {
   getController(event: any): void {
     this.filesControllerStsToShow = event.target.value;
     this.filesControllerSts = this.filesControllerStsToShow - 1;
-    console.log(this.filesControllerSts, " files controller");
   }
 }

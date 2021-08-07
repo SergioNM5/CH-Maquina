@@ -327,7 +327,7 @@ export class CheckSyntaxService {
           errores.push("Error de sintaxis, menos de 1 operadores especificados: " + linea);
         }
 
-      } else {
+      } else if (!codeLines[instruccion][0].trim().includes('//')) {
         errores.push("No se reconoce la intrucción: " + linea);
       }
 

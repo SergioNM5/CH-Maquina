@@ -16,6 +16,9 @@ export class RunProcessService {
 
     for (let instruccion = 0; instruccion < fileCh.codeLines.length; instruccion++) {
 
+      if (fileCh.codeLines[instruccion][0].trim().includes('//')) {
+        continue;
+      }
       if (fileCh.codeLines[instruccion][0].trim().toLowerCase() == 'cargue') {
 
         for (let variable = 0; variable < fileCh.variables.length; variable++) {
@@ -77,7 +80,7 @@ export class RunProcessService {
         if (Number(acumulador) > 0) {
 
           for (let variable = 0; variable < fileCh.tags.length; variable++) {
-            
+
             if (fileCh.codeLines[instruccion][1] === fileCh.tags[variable].name && +fileCh.tags[variable].value < fileCh.codeLines.length - 1) {
               instruccion = Number(fileCh.tags[variable].value) - 2;
             }
@@ -255,9 +258,9 @@ export class RunProcessService {
         }
         for (let variable of fileCh.variables) {
           if (fileCh.codeLines[instruccion][2].trim() === variable.name) {
-              variable.value = String(guardarResultado);
+            variable.value = String(guardarResultado);
           }
-      }
+        }
 
       } else if (fileCh.codeLines[instruccion][0].trim().toLowerCase() == 'imprima') {
 
@@ -275,7 +278,6 @@ export class RunProcessService {
 
         }
       }
-
     }
 
     return [fileCh, listToShow, listToPrint];

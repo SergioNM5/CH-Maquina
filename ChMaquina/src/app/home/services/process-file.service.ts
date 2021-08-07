@@ -31,9 +31,6 @@ export class ProcessFileService {
       if (listLines[j] === '' || listLines[j] === undefined || listLines[j].length === 1 ) {
         listLines.splice(j,1);
         j--;
-      } else if (listLines[j].includes('//')) {
-        listLines.splice(j,1);
-        j--;
       }
     }
 

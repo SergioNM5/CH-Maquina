@@ -16,6 +16,10 @@ export class RunStepToStepService {
     let listToShow: any[] = [];
     let listToPrint: any[] = [];
 
+    if (!fileCh.codeLines[amountSteptoStep][0].trim().includes('//')) {
+      let line: any = fileCh.codeLines[amountSteptoStep];
+      confirm(`${line.join(' ')}`);
+
       if (fileCh.codeLines[amountSteptoStep][0].trim().toLowerCase() == 'cargue') {
 
         for (let variable = 0; variable < fileCh.variables.length; variable++) {
@@ -118,7 +122,6 @@ export class RunStepToStepService {
           if (fileCh.codeLines[amountSteptoStep][1] == fileCh.variables[variable].name) {
             let newValue = prompt(`Ingrese el valor de la variable ${fileCh.variables[variable].name}`);
             fileCh.variables[variable].value = String(newValue);
-            console.log(fileCh.variables[variable].value);
           }
 
         }
@@ -256,9 +259,9 @@ export class RunStepToStepService {
         }
         for (let variable of fileCh.variables) {
           if (fileCh.codeLines[amountSteptoStep][2].trim() === variable.name) {
-              variable.value = String(guardarResultado);
+            variable.value = String(guardarResultado);
           }
-      }
+        }
 
       } else if (fileCh.codeLines[amountSteptoStep][0].trim().toLowerCase() == 'imprima') {
 
@@ -276,11 +279,12 @@ export class RunStepToStepService {
 
         }
       }
-      confirm(`${fileCh.codeLines[amountSteptoStep]}`)
+      return [fileCh, listToShow, listToPrint, acumulador, smallAmountSteptoStep + 1];
+    } else {
+      let line: any = fileCh.codeLines[amountSteptoStep];
+      alert('Comentario: ' + `${line.join(' ')}`);
       return [fileCh, listToShow, listToPrint, acumulador, smallAmountSteptoStep + 1];
     }
-
-
-
+  }
 
 }
