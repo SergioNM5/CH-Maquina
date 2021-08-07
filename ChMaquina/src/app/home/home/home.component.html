@@ -8,6 +8,13 @@
             [disabled]='buttonState'>
         </mat-form-field>
       </div>
+      <div class="inputs__div inputFileStepToStep">
+        <mat-form-field>
+          <mat-label>Archivo a correr (Paso a Paso)</mat-label>
+          <input matInput type="number" placeholder="Archivo a correr" id="fileController" (change)="getController($event)" [value]='filesControllerSts'
+            [disabled]='!buttonState' [max]="filesArray.length" min="0">
+        </mat-form-field>
+      </div>
       <div class="inputs__div">
         <mat-form-field>
           <mat-label>Memoria</mat-label>
@@ -15,7 +22,9 @@
             [disabled]='buttonState'>
         </mat-form-field>
       </div>
+
     </div>
+
     <div class="inputFile">
       <input type="file" class="fileInput" (change)='onFileSelected($event)' #fileUpload>
       <div class="file-upload">

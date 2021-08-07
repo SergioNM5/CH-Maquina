@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { HelperService } from '../services/helper.service';
 import { CommunicationService } from '../services/communication.service';
+import { RunStepToStepService } from '../home/services/run-step-to-step.service';
 
 @Component({
   selector: 'app-nav',
@@ -23,11 +24,12 @@ export class NavComponent implements OnInit {
   btnMessage: string = 'Encender';
   filesArray: any[] = [];
   fileToRun: number = 0;
+  amountSteptoStep: number = 0;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
     private helper: HelperService,
-    private communication: CommunicationService
+    private communication: CommunicationService,
   ) { }
 
   ngOnInit() {
@@ -53,5 +55,10 @@ export class NavComponent implements OnInit {
   runEvent(event: any): void {
     this.helper.editFileToRunEvent(this.fileToRun);
     this.fileToRun++;
+  }
+
+  runSteptoStep(): void {
+    this.helper.editAmountSteptoStepEvent(this.amountSteptoStep);
+    this.amountSteptoStep++
   }
 }

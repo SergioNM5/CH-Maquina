@@ -4,6 +4,7 @@ import { HelperService } from 'src/app/services/helper.service';
 import { CommunicationService } from 'src/app/services/communication.service';
 import { state } from '@angular/animations';
 import { RunProcessService } from '../services/run-process.service';
+import { RunStepToStepService } from '../services/run-step-to-step.service';
 
 @Component({
   selector: 'app-home',
@@ -22,12 +23,15 @@ export class HomeComponent implements OnInit {
   contId: number = 1 + this.kernel;
   buttonState: boolean = false;
   fileToRun: number = 0;
+  filesControllerSts: number = 0;
+  amountSteptoStep: number = 0;
 
   constructor(
     private processFile: ProcessFileService,
     private helper: HelperService,
     private communication: CommunicationService,
-    private runProcess: RunProcessService
+    private runProcess: RunProcessService,
+    private step: RunStepToStepService
   ) { }
 
   onFileSelected(event: any) {
@@ -93,6 +97,26 @@ export class HomeComponent implements OnInit {
         printer.innerHTML = listMessageToPrint.join('<br></br>');
       }
     });
+    this.helper.currentAmountSteptoStep.subscribe(amount => {
+      this.amountSteptoStep = amount;
+      if(this.filesArray.length !== 0) { //send the amount to the nav component
+        [this.filesArray[this.filesControllerSts], this.filesArray[this.filesControllerSts].listToShow, this.filesArray[this.filesControllerSts].listToPrint, this.acumulator] = this.step.stepToStep(this.filesArray[this.filesControllerSts], this.acumulator, this.amountSteptoStep);
+        let monitor: any = document.getElementById("monitor");
+        monitor.innerHTML = "";
+        let listMessageToShow: string[] = [];
+        for (let message of this.filesArray[this.fileToRun].listToShow) {
+          listMessageToShow.push(`${message[0]}: ${message[1]}`);
+        }
+        monitor.innerHTML = listMessageToShow.join('<br></br>');
+        let printer: any = document.getElementById("printer")
+        printer.innerHTML = "";
+        let listMessageToPrint: string[] = [];
+        for (let message of this.filesArray[this.fileToRun].listToPrint) {
+          listMessageToPrint.push(`${message[0]}: ${message[1]}`);
+        }
+        printer.innerHTML = listMessageToPrint.join('<br></br>');
+      }
+    });
   }
 
   loadInformation(filesArray: any[]): void {
@@ -101,5 +125,11 @@ export class HomeComponent implements OnInit {
 
   loadInputs(inputs: number[]): void {
     this.communication.showInputs(inputs);
+  }
+
+  getController(event: any): void {
+    this.filesControllerSts = event.target.value;
+    console.log(this.filesControllerSts);
+
   }
 }

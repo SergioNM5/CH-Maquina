@@ -10,13 +10,18 @@ main {
   .inputs {
     width: 100%;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     @media (min-width: 800px) {
-      justify-content: flex-start;
+      justify-content: space-between;
       .inputs__div {
         margin-right: 20px;
       }
+      .inputFileStepToStep {
+        order: 2;
+      }
     }
+
   }
   .inputFile {
     margin: 20px 0;

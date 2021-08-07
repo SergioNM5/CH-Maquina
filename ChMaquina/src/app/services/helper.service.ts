@@ -12,6 +12,9 @@ export class HelperService {
   private fileToRun = new BehaviorSubject<number>(0);
   currentFileToRun = this.fileToRun.asObservable();
 
+  private amountSteptoStep = new BehaviorSubject<number>(0);
+  currentAmountSteptoStep = this.amountSteptoStep.asObservable();
+
   constructor() { }
 
   editShowEvent(newClick: boolean) {
@@ -22,4 +25,7 @@ export class HelperService {
     this.fileToRun.next(newValue);
   }
 
+  editAmountSteptoStepEvent(amount: number) {
+    this.amountSteptoStep.next(amount);
+  }
 }

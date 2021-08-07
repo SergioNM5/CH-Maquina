@@ -25,7 +25,7 @@
       <header class="header">
         <button mat-raised-button class="button-nav" (click)="toggleEvent($event)"> {{ btnMessage }} </button>
         <button mat-raised-button class="button-nav" (click)="runEvent($event)" [disabled]="!enableButtons">Ejecutar programa</button>
-        <button mat-raised-button class="button-nav" [disabled]="!enableButtons">Paso a Paso</button>
+        <button mat-raised-button class="button-nav" (click)="runSteptoStep()" [disabled]="!enableButtons">Paso a Paso</button>
       </header>
     </mat-toolbar>
     <!-- Add Content Here -->
