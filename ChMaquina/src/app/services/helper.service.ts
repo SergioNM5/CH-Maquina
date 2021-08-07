@@ -15,6 +15,9 @@ export class HelperService {
   private amountSteptoStep = new BehaviorSubject<number>(0);
   currentAmountSteptoStep = this.amountSteptoStep.asObservable();
 
+  private acumulator = new BehaviorSubject<number>(0);
+  currentAcumulator = this.acumulator.asObservable();
+
   constructor() { }
 
   editShowEvent(newClick: boolean) {
@@ -27,5 +30,9 @@ export class HelperService {
 
   editAmountSteptoStepEvent(amount: number) {
     this.amountSteptoStep.next(amount);
+  }
+
+  editAcumulatorEvent(acumulator: number) {
+    this.acumulator.next(acumulator);
   }
 }

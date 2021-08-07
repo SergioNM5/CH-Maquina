@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ProcessFileService } from 'src/app/home/services/process-file.service';
 import { CommunicationService } from 'src/app/services/communication.service';
+import { HelperService } from 'src/app/services/helper.service';
 
 @Component({
   selector: 'app-memory',
@@ -21,7 +22,8 @@ export class MemoryComponent implements OnInit {
 
   constructor(
     private communication: CommunicationService,
-    private processFile: ProcessFileService
+    private processFile: ProcessFileService,
+    private helper: HelperService
   ) { }
 
   ngOnInit() {

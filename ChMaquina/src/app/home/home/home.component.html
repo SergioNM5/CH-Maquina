@@ -11,8 +11,8 @@
       <div class="inputs__div inputFileStepToStep">
         <mat-form-field>
           <mat-label>Archivo a correr (Paso a Paso)</mat-label>
-          <input matInput type="number" placeholder="Archivo a correr" id="fileController" (change)="getController($event)" [value]='filesControllerSts'
-            [disabled]='!buttonState' [max]="filesArray.length" min="0">
+          <input matInput type="number" placeholder="Archivo a correr" id="fileController" (change)="getController($event)" [value]='filesControllerStsToShow'
+            [disabled]='!buttonState' [max]="filesArray.length" min="1">
         </mat-form-field>
       </div>
       <div class="inputs__div">
@@ -41,7 +41,7 @@
         <div class="monitor">
           <img src="../../../assets/fca94042113e17fcb564441a5ed00c15.png" alt="monitor">
           <div id="monitor" class="monitor__text">
-            I am a monitor aaaaaaaaaaaa
+            CH Maquina
           </div>
         </div>
         <div class="print">

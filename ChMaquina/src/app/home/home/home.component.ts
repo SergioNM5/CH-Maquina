@@ -23,6 +23,7 @@ export class HomeComponent implements OnInit {
   contId: number = 1 + this.kernel;
   buttonState: boolean = false;
   fileToRun: number = 0;
+  filesControllerStsToShow: number = 1;
   filesControllerSts: number = 0;
   amountSteptoStep: number = 0;
 
@@ -98,9 +99,9 @@ export class HomeComponent implements OnInit {
       }
     });
     this.helper.currentAmountSteptoStep.subscribe(amount => {
-      this.amountSteptoStep = amount;
-      if(this.filesArray.length !== 0) { //send the amount to the nav component
-        [this.filesArray[this.filesControllerSts], this.filesArray[this.filesControllerSts].listToShow, this.filesArray[this.filesControllerSts].listToPrint, this.acumulator] = this.step.stepToStep(this.filesArray[this.filesControllerSts], this.acumulator, this.amountSteptoStep);
+      if(this.filesArray.length !== 0 && this.amountSteptoStep < this.filesArray[this.filesControllerSts].codeLines.length) {
+        [this.filesArray[this.filesControllerSts], this.filesArray[this.filesControllerSts].listToShow, this.filesArray[this.filesControllerSts].listToPrint, this.acumulator, this.amountSteptoStep] = this.step.stepToStep(this.filesArray[this.filesControllerSts], this.acumulator, this.amountSteptoStep);
+        this.loadInputs([+this.acumulator, this.kernel, this.memory]);
         let monitor: any = document.getElementById("monitor");
         monitor.innerHTML = "";
         let listMessageToShow: string[] = [];
@@ -128,8 +129,8 @@ export class HomeComponent implements OnInit {
   }
 
   getController(event: any): void {
-    this.filesControllerSts = event.target.value;
-    console.log(this.filesControllerSts);
-
+    this.filesControllerStsToShow = event.target.value;
+    this.filesControllerSts = this.filesControllerStsToShow - 1;
+    console.log(this.filesControllerSts, " files controller");
   }
 }

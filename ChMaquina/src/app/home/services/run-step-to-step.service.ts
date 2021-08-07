@@ -6,12 +6,12 @@ import { HelperService } from 'src/app/services/helper.service';
   providedIn: 'root'
 })
 export class RunStepToStepService {
-  amountSteptoStep: number = 0;
+
   constructor(private helper: HelperService) { }
 
+  stepToStep(fileCh: FileCH, acumulador: string, amountSteptoStep: number): [FileCH, any[], any[], string, number] {
 
-
-  stepToStep(fileCh: FileCH, acumulador: string, amountSteptoStep: number): [FileCH, any[], any[], string] {
+    let smallAmountSteptoStep: number = amountSteptoStep;
 
     let listToShow: any[] = [];
     let listToPrint: any[] = [];
@@ -65,7 +65,7 @@ export class RunStepToStepService {
           if (fileCh.codeLines[amountSteptoStep][1] === fileCh.tags[variable].name && +fileCh.tags[variable].value < fileCh.codeLines.length) {
 
             if (+fileCh.tags[variable].value <= amountSteptoStep) {
-              this.amountSteptoStep = Number(+fileCh.tags[variable].value) - 2;
+              smallAmountSteptoStep = Number(+fileCh.tags[variable].value) - 2;
             }
 
           }
@@ -73,17 +73,13 @@ export class RunStepToStepService {
         }
 
       } else if (fileCh.codeLines[amountSteptoStep][0].trim().toLowerCase() == 'vayasi') {
-        console.log(acumulador + 'Acumulador');
 
         if (Number(acumulador) > 0) {
 
           for (let variable = 0; variable < fileCh.tags.length; variable++) {
 
             if (fileCh.codeLines[amountSteptoStep][1] === fileCh.tags[variable].name && +fileCh.tags[variable].value < fileCh.codeLines.length - 1) {
-              this.helper.editAmountSteptoStepEvent(this.amountSteptoStep);
-              this.amountSteptoStep = Number(fileCh.tags[variable].value) - 2;
-              console.log(`amount to step become ${this.amountSteptoStep}`);
-
+              smallAmountSteptoStep = Number(fileCh.tags[variable].value) - 2;
             }
 
           }
@@ -93,7 +89,7 @@ export class RunStepToStepService {
           for (let variable = 0; variable < fileCh.tags.length; variable++) {
 
             if (fileCh.codeLines[amountSteptoStep][2] == fileCh.tags[variable].name && +fileCh.tags[variable].value < fileCh.codeLines.length) {
-              this.amountSteptoStep = Number(+fileCh.tags[variable].value);// posible -1 or -2
+              smallAmountSteptoStep = Number(+fileCh.tags[variable].value) - 1;// posible -1 or -2
             }
 
           }
@@ -122,6 +118,7 @@ export class RunStepToStepService {
           if (fileCh.codeLines[amountSteptoStep][1] == fileCh.variables[variable].name) {
             let newValue = prompt(`Ingrese el valor de la variable ${fileCh.variables[variable].name}`);
             fileCh.variables[variable].value = String(newValue);
+            console.log(fileCh.variables[variable].value);
           }
 
         }
@@ -280,7 +277,7 @@ export class RunStepToStepService {
         }
       }
       confirm(`${fileCh.codeLines[amountSteptoStep]}`)
-      return [fileCh, listToShow, listToPrint, acumulador];
+      return [fileCh, listToShow, listToPrint, acumulador, smallAmountSteptoStep + 1];
     }
 
 
