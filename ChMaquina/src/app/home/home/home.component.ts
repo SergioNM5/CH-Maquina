@@ -26,6 +26,7 @@ export class HomeComponent implements OnInit {
   filesControllerStsToShow: number = 1;
   filesControllerSts: number = 0;
   amountSteptoStep: number = 0;
+  algorithmToUse: string = 'fcfs';
 
   constructor(
     private processFile: ProcessFileService,
@@ -59,6 +60,9 @@ export class HomeComponent implements OnInit {
       }
       this.loadInformation(this.filesArray);
       this.loadInputs([+this.acumulator, this.kernel, this.memory]);
+    }, 500);
+    setTimeout(() => {
+      console.log(this.filesArray);
     }, 500);
   }
 
@@ -128,5 +132,9 @@ export class HomeComponent implements OnInit {
   getController(event: any): void {
     this.filesControllerStsToShow = event.target.value;
     this.filesControllerSts = this.filesControllerStsToShow - 1;
+  }
+
+  getAlgorithm(event: any): void {
+    this.algorithmToUse = event.target.value;
   }
 }
