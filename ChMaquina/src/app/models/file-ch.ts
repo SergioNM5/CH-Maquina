@@ -21,6 +21,16 @@ export class FileCH {
   listToShow: any[] = [];
   // list to print
   listToPrint: any[] = [];
+  // burst I/O
+  burstIO: number = 0;
+  // burst CPU
+  burstCPU: number = 0;
+  // arrival time
+  arrivalTime: number = 0;
+  // priority
+  priority: number = 0;
+  // slice (Q)
+  slice: number = 0;
 
   constructor() {
   }

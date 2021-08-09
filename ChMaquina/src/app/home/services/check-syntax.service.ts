@@ -9,7 +9,11 @@ export class CheckSyntaxService {
 
   constructor() { }
 
-  checkSyntax(codeLines: string[]): [Tag[], Variable[], string[]] {
+  checkSyntax(codeLines: string[]): [Tag[], Variable[], string[], number, number, number] {
+
+    let burstIOCount = 0;
+    let burstCPUCount = 0;
+    let slice: number = 0;
 
     // Errores
     let errores: string[] = [];
@@ -120,6 +124,7 @@ export class CheckSyntaxService {
         }
 
         variables.push(variable);
+        slice++;
 
       } else if (codeLines[instruccion][0].trim().toLowerCase() == 'lea') {
 
@@ -129,6 +134,8 @@ export class CheckSyntaxService {
         if (codeLines[instruccion].length < 2) {
           errores.push("Error de sintaxis, menos de 2 operadores especificados: " + linea);
         }
+        burstIOCount++;
+        slice += Math.floor(Math.random() * 9) + 1;
 
       } else if (codeLines[instruccion][0].trim().toLowerCase() == 'cargue') {
 
@@ -138,6 +145,8 @@ export class CheckSyntaxService {
         if (codeLines[instruccion].length < 2) {
           errores.push("Error de sintaxis, menos de 2 operadores especificados: " + linea);
         }
+        burstCPUCount++;
+        slice++;
 
       } else if (codeLines[instruccion][0].trim().toLowerCase() == 'almacene') {
 
@@ -147,6 +156,8 @@ export class CheckSyntaxService {
         if (codeLines[instruccion].length < 2) {
           errores.push("Error de sintaxis, menos de 2 operadores especificados: " + linea);
         }
+        burstCPUCount++;
+        slice++;
 
       } else if (codeLines[instruccion][0].trim().toLowerCase() == 'vaya') {
 
@@ -156,6 +167,8 @@ export class CheckSyntaxService {
         if (codeLines[instruccion].length < 2) {
           errores.push("Error de sintaxis, menos de 2 operadores especificados: " + linea);
         }
+        burstCPUCount++;
+        slice++;
 
       } else if (codeLines[instruccion][0].trim().toLowerCase() == 'vayasi') {
 
@@ -165,6 +178,8 @@ export class CheckSyntaxService {
         if (codeLines[instruccion].length < 3) {
           errores.push("Error de sintaxis, menos de 2 operadores especificados: " + linea);
         }
+        burstCPUCount++;
+        slice++;
 
       } else if (codeLines[instruccion][0].trim().toLowerCase() == 'etiqueta') {
 
@@ -191,6 +206,7 @@ export class CheckSyntaxService {
         tag.name = codeLines[instruccion][1];
         tag.value = num;
         tags.push(tag);
+        slice++;
 
       } else if (codeLines[instruccion][0].trim().toLowerCase() == 'sume') {
 
@@ -200,6 +216,8 @@ export class CheckSyntaxService {
         if (codeLines[instruccion].length < 2) {
           errores.push("Error de sintaxis, menos de 2 operadores especificados: " + linea);
         }
+        burstCPUCount++;
+        slice++;
 
       } else if (codeLines[instruccion][0].trim().toLowerCase() == 'reste') {
 
@@ -209,6 +227,8 @@ export class CheckSyntaxService {
         if (codeLines[instruccion].length < 2) {
           errores.push("Error de sintaxis, menos de 2 operadores especificados: " + linea);
         }
+        burstCPUCount++;
+        slice++;
 
       } else if (codeLines[instruccion][0].trim().toLowerCase() == 'multiplique') {
 
@@ -218,6 +238,8 @@ export class CheckSyntaxService {
         if (codeLines[instruccion].length < 2) {
           errores.push("Error de sintaxis, menos de 2 operadores especificados: " + linea);
         }
+        burstCPUCount++;
+        slice++;
 
       } else if (codeLines[instruccion][0].trim().toLowerCase() == 'divida') {
 
@@ -227,6 +249,8 @@ export class CheckSyntaxService {
         if (codeLines[instruccion].length < 2) {
           errores.push("Error de sintaxis, menos de 2 operadores especificados: " + linea);
         }
+        burstCPUCount++;
+        slice++;
 
       } else if (codeLines[instruccion][0].trim().toLowerCase() == 'potencia') {
 
@@ -236,6 +260,8 @@ export class CheckSyntaxService {
         if (codeLines[instruccion].length < 2) {
           errores.push("Error de sintaxis, menos de 2 operadores especificados: " + linea);
         }
+        burstCPUCount++;
+        slice++;
 
       } else if (codeLines[instruccion][0].trim().toLowerCase() == 'modulo') {
 
@@ -245,6 +271,8 @@ export class CheckSyntaxService {
         if (codeLines[instruccion].length < 2) {
           errores.push("Error de sintaxis, menos de 2 operadores especificados: " + linea);
         }
+        burstCPUCount++;
+        slice++;
 
       } else if (codeLines[instruccion][0].trim().toLowerCase() == 'concatene') {
 
@@ -254,6 +282,8 @@ export class CheckSyntaxService {
         if (codeLines[instruccion].length < 2) {
           errores.push("Error de sintaxis, menos de 2 operadores especificados: " + linea);
         }
+        burstCPUCount++;
+        slice++;
 
       } else if (codeLines[instruccion][0].trim().toLowerCase() == 'elimine') {
 
@@ -263,6 +293,8 @@ export class CheckSyntaxService {
         if (codeLines[instruccion].length < 2) {
           errores.push("Error de sintaxis, menos de 2 operadores especificados: " + linea);
         }
+        burstCPUCount++;
+        slice++;
 
       } else if (codeLines[instruccion][0].trim().toLowerCase() == 'Y') {
 
@@ -272,6 +304,8 @@ export class CheckSyntaxService {
         if (codeLines[instruccion].length < 4) {
           errores.push("Error de sintaxis, menos de 4 operadores especificados: " + linea);
         }
+        burstCPUCount++;
+        slice++;
 
       } else if (codeLines[instruccion][0].trim().toLowerCase() == 'O') {
 
@@ -281,6 +315,8 @@ export class CheckSyntaxService {
         if (codeLines[instruccion].length < 4) {
           errores.push("Error de sintaxis, menos de 4 operadores especificados: " + linea);
         }
+        burstCPUCount++;
+        slice++;
 
       } else if (codeLines[instruccion][0].trim().toLowerCase() == 'NO') {
 
@@ -290,6 +326,8 @@ export class CheckSyntaxService {
         if (codeLines[instruccion].length < 3) {
           errores.push("Error de sintaxis, menos de 4 operadores especificados: " + linea);
         }
+        burstCPUCount++;
+        slice++;
 
       } else if (codeLines[instruccion][0].trim().toLowerCase() == 'muestre') {
 
@@ -299,6 +337,8 @@ export class CheckSyntaxService {
         if (codeLines[instruccion].length < 2) {
           errores.push("Error de sintaxis, menos de 2 operadores especificados: " + linea);
         }
+        burstIOCount++;
+        slice += Math.floor(Math.random() * 9) + 1;
 
       } else if (codeLines[instruccion][0].trim().toLowerCase() == 'imprima') {
 
@@ -308,6 +348,8 @@ export class CheckSyntaxService {
         if (codeLines[instruccion].length < 2) {
           errores.push("Error de sintaxis, menos de 2 operadores especificados: " + linea);
         }
+        burstIOCount++;
+        slice += Math.floor(Math.random() * 9) + 1;
 
       } else if (codeLines[instruccion][0].trim().toLowerCase() == 'retorne') {
 
@@ -317,6 +359,7 @@ export class CheckSyntaxService {
         if (codeLines[instruccion].length < 1) {
           errores.push("Error de sintaxis, menos de 1 operadores especificados: " + linea);
         }
+        slice++;
 
       } else if (codeLines[instruccion][0].trim().toLowerCase() == 'extraiga') {
 
@@ -326,6 +369,8 @@ export class CheckSyntaxService {
         if (codeLines[instruccion].length < 1) {
           errores.push("Error de sintaxis, menos de 1 operadores especificados: " + linea);
         }
+        burstCPUCount++;
+        slice++;
 
       } else if (!codeLines[instruccion][0].trim().includes('//')) {
         errores.push("No se reconoce la intrucción: " + linea);
@@ -333,7 +378,7 @@ export class CheckSyntaxService {
 
     }
 
-    return [tags, variables, errores];
+    return [tags, variables, errores, burstIOCount, burstCPUCount, slice];
 
   }
 

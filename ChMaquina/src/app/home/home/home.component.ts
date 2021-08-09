@@ -5,6 +5,7 @@ import { CommunicationService } from 'src/app/services/communication.service';
 import { state } from '@angular/animations';
 import { RunProcessService } from '../services/run-process.service';
 import { RunStepToStepService } from '../services/run-step-to-step.service';
+import { AlgorithmManagementService } from '../services/algorithm-management.service';
 
 @Component({
   selector: 'app-home',
@@ -33,7 +34,8 @@ export class HomeComponent implements OnInit {
     private helper: HelperService,
     private communication: CommunicationService,
     private runProcess: RunProcessService,
-    private step: RunStepToStepService
+    private step: RunStepToStepService,
+    private algorithmManagement: AlgorithmManagementService
   ) { }
 
   onFileSelected(event: any) {
@@ -60,6 +62,7 @@ export class HomeComponent implements OnInit {
       }
       this.loadInformation(this.filesArray);
       this.loadInputs([+this.acumulator, this.kernel, this.memory]);
+      this.filesArray = this.algorithmManagement.timeOrderer(this.filesArray);
     }, 500);
     setTimeout(() => {
       console.log(this.filesArray);
@@ -136,5 +139,8 @@ export class HomeComponent implements OnInit {
 
   getAlgorithm(event: any): void {
     this.algorithmToUse = event.target.value;
+    // this.filesArray = this.algorithmManagement.orderFiles(this.filesArray, this.algorithmToUse);
+    // console.log(this.filesArray);
+
   }
 }

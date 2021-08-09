@@ -48,11 +48,19 @@ export class ProcessFileService {
     fileCh.ipMemory = this.zeroFill(String(contId), 4);
     fileCh.fpMemory = this.zeroFill(String((fileCh._amountInst - 1) + (+contId)), 4);
 
-    let resultSyntax: [Tag[], Variable[], string[]] = this.checkSyntax.checkSyntax(fileCh.codeLines);
+    let resultSyntax: [Tag[], Variable[], string[], number, number, number] = this.checkSyntax.checkSyntax(fileCh.codeLines);
 
     fileCh.tags = resultSyntax[0];
     fileCh.variables = resultSyntax[1];
     fileCh.fpvMemory = this.zeroFill(String(+fileCh.fpMemory + fileCh.variables.length), 4);
+    fileCh.burstIO = resultSyntax[3];
+    fileCh.burstCPU = resultSyntax[4];
+    fileCh.slice = resultSyntax[5];
+    fileCh.priority = Number(prompt(`Defina la prioridad del proceso: ${fileCh._name} en un rango de 0 a 100`));
+    while (fileCh.priority < 0 || fileCh.priority > 100) {
+      fileCh.priority = Number(prompt(`El valor ingresado no cumple con los parametros establecidos, debe estar en un rango de 0 a 100.
+      Ingrese de nuevo el valor`));
+    }
 
     for (let tag of fileCh.tags) {
       tag.id = fileCh._id;
