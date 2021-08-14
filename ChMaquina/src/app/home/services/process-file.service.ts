@@ -14,7 +14,7 @@ export class ProcessFileService {
     private checkSyntax: CheckSyntaxService
   ) { }
 
-  transformFile(contentFile: any, kernel: number, contId: number, id: number, fileName: string): FileCH | void {
+  transformFile(contentFile: any, kernel: number, contId: number, id: number, fileName: string, algorithmToUse: string): FileCH | void {
     let fileCh: FileCH = new FileCH;
     fileCh._id = this.zeroFill(String(id), 4);
     fileCh._name = fileName;
@@ -45,7 +45,7 @@ export class ProcessFileService {
     }
     fileCh._amountInst = listLines.length;
     fileCh.codeLines = <string[]>listLines;
-    fileCh.ipMemory = this.zeroFill(String(contId), 4);
+    fileCh.ipMemory = this.zeroFill(String(+contId), 4);
     fileCh.fpMemory = this.zeroFill(String((fileCh._amountInst - 1) + (+contId)), 4);
 
     let resultSyntax: [Tag[], Variable[], string[], number, number, number] = this.checkSyntax.checkSyntax(fileCh.codeLines);
@@ -56,10 +56,12 @@ export class ProcessFileService {
     fileCh.burstIO = resultSyntax[3];
     fileCh.burstCPU = resultSyntax[4];
     fileCh.slice = resultSyntax[5];
-    fileCh.priority = Number(prompt(`Defina la prioridad del proceso: ${fileCh._name} en un rango de 0 a 100`));
-    while (fileCh.priority < 0 || fileCh.priority > 100) {
-      fileCh.priority = Number(prompt(`El valor ingresado no cumple con los parametros establecidos, debe estar en un rango de 0 a 100.
-      Ingrese de nuevo el valor`));
+    if(algorithmToUse === 'priority'){
+      fileCh.priority = Number(prompt(`Defina la prioridad del proceso: ${fileCh._name} en un rango de 0 a 100`));
+      while (fileCh.priority < 0 || fileCh.priority > 100) {
+        fileCh.priority = Number(prompt(`El valor ingresado no cumple con los parametros establecidos, debe estar en un rango de 0 a 100.
+        Ingrese de nuevo el valor`));
+      }
     }
 
     for (let tag of fileCh.tags) {

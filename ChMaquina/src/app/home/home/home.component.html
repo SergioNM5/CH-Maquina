@@ -10,11 +10,11 @@
       </div>
       <mat-form-field class="select-algorithm">
         <mat-label>Algoritmo</mat-label>
-        <select matNativeControl required [disabled]='!buttonState' id="algorithmToUse" (change)="getAlgorithm($event)">
+        <select matNativeControl required [disabled]='buttonState' id="algorithmToUse" (change)="getAlgorithm($event)">
+          <option value="rr">RoundRobin</option>
           <option value="fcfs">FCFS</option>
           <option value="sjf">SJF</option>
           <option value="srtn">SRTN</option>
-          <option value="rr">RoundRobin</option>
           <option value="priority">Prioridad</option>
         </select>
       </mat-form-field>

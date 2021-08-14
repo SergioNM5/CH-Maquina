@@ -21,13 +21,13 @@ export class HomeComponent implements OnInit {
   kernel: number = 19;
   memory: number = 100;
   acumulator: string = '0';
-  contId: number = 1 + this.kernel;
+  contId: number = Number(1) + Number(this.kernel);
   buttonState: boolean = false;
   fileToRun: number = 0;
   filesControllerStsToShow: number = 1;
   filesControllerSts: number = 0;
   amountSteptoStep: number = 0;
-  algorithmToUse: string = 'fcfs';
+  algorithmToUse: string = 'rr';
 
   constructor(
     private processFile: ProcessFileService,
@@ -42,7 +42,7 @@ export class HomeComponent implements OnInit {
     this.communication.currentShowEvent.subscribe(state => {
       this.filesArray = state;
       this.contId = (this.filesArray[this.filesArray.length - 1]) != undefined ?
-        +this.filesArray[this.filesArray.length - 1].fpvMemory + 1 : 1 + this.kernel;
+        +this.filesArray[this.filesArray.length - 1].fpvMemory + 1 : 1 + Number(this.kernel);
     });
     this.file = event.target.files[0];
     this.fileName = event.target.files[0].name;
@@ -52,7 +52,7 @@ export class HomeComponent implements OnInit {
     }
     fileReader.readAsText(this.file);
     setTimeout(() => {
-      this.filesArray.push(this.processFile.transformFile(this.fileLoaded, this.kernel, this.contId, this.filesArray.length, this.fileName));
+      this.filesArray.push(this.processFile.transformFile(this.fileLoaded, this.kernel, this.contId, this.filesArray.length, this.fileName, this.algorithmToUse));
       if (this.filesArray.length > 0) {
         this.contId = +this.filesArray[this.filesArray.length - 1].fpvMemory + 1;
       }
@@ -61,17 +61,18 @@ export class HomeComponent implements OnInit {
         alert('Capacidad de Memoria excedida');
       }
       this.loadInformation(this.filesArray);
-      this.loadInputs([+this.acumulator, this.kernel, this.memory]);
+      this.loadInputs([+this.acumulator, +this.kernel, +this.memory]);
       this.filesArray = this.algorithmManagement.timeOrderer(this.filesArray);
     }, 500);
     setTimeout(() => {
       console.log(this.filesArray);
+      this.filesArray = this.algorithmManagement.orderFiles(this.filesArray, this.algorithmToUse);
     }, 500);
   }
 
   getKernel(event: any): void {
     this.kernel = event.target.value;
-    this.contId = 1 + +this.kernel;
+    this.contId = Number(1) + Number(this.kernel);
   }
 
   getMemory(event: any): void {
@@ -105,7 +106,7 @@ export class HomeComponent implements OnInit {
     this.helper.currentAmountSteptoStep.subscribe(() => {
       if(this.filesArray.length !== 0 && this.amountSteptoStep < this.filesArray[this.filesControllerSts].codeLines.length) {
         [this.filesArray[this.filesControllerSts], this.filesArray[this.filesControllerSts].listToShow, this.filesArray[this.filesControllerSts].listToPrint, this.acumulator, this.amountSteptoStep] = this.step.stepToStep(this.filesArray[this.filesControllerSts], this.acumulator, this.amountSteptoStep);
-        this.loadInputs([+this.acumulator, this.kernel, this.memory]);
+        this.loadInputs([+this.acumulator, +this.kernel, +this.memory]);
         let monitor: any = document.getElementById("monitor");
         monitor.innerHTML = "";
         let listMessageToShow: string[] = [];
@@ -113,7 +114,7 @@ export class HomeComponent implements OnInit {
           listMessageToShow.push(`${message[0]}: ${message[1]}`);
         }
         monitor.innerHTML = listMessageToShow.join('<br></br>');
-        let printer: any = document.getElementById("printer")
+        let printer: any = document.getElementById("printer");
         printer.innerHTML = "";
         let listMessageToPrint: string[] = [];
         for (let message of this.filesArray[this.fileToRun].listToPrint) {
@@ -122,10 +123,18 @@ export class HomeComponent implements OnInit {
         printer.innerHTML = listMessageToPrint.join('<br></br>');
       }
     });
+
   }
 
   loadInformation(filesArray: any[]): void {
     this.communication.showInfoEvent(filesArray);
+  }
+
+  loadKernel(kernel: number): void {
+    this.helper.editKernelEvent(kernel);
+  }
+  loadMemory(memory: number): void {
+    this.helper.editMemoryEvent(memory);
   }
 
   loadInputs(inputs: number[]): void {
@@ -139,8 +148,8 @@ export class HomeComponent implements OnInit {
 
   getAlgorithm(event: any): void {
     this.algorithmToUse = event.target.value;
-    // this.filesArray = this.algorithmManagement.orderFiles(this.filesArray, this.algorithmToUse);
-    // console.log(this.filesArray);
+    this.filesArray = this.algorithmManagement.orderFiles(this.filesArray, this.algorithmToUse);
+    console.log(this.filesArray);
 
   }
 }
