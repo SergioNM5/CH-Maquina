@@ -12,7 +12,7 @@ export class CommunicationService {
   currentShowEvent = this.showEvent.asObservable();
 
   // Acumulator, Kernel and Memory Array Observable
-  private inputs = new BehaviorSubject<number[]>([0,0,0]);
+  private inputs = new BehaviorSubject<number[]>([0,19,100]);
   currentInputs = this.inputs.asObservable();
 
   constructor() { }

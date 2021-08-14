@@ -18,8 +18,8 @@ export class HomeComponent implements OnInit {
   fileLoaded: any = '';
   file: any;
   filesArray: any[] = [];
-  kernel: number = 19;
-  memory: number = 100;
+  kernel: number = 0;
+  memory: number = 0;
   acumulator: string = '0';
   contId: number = Number(1) + Number(this.kernel);
   buttonState: boolean = false;
@@ -67,6 +67,8 @@ export class HomeComponent implements OnInit {
     setTimeout(() => {
       console.log(this.filesArray);
       this.filesArray = this.algorithmManagement.orderFiles(this.filesArray, this.algorithmToUse);
+      console.log(this.kernel);
+
     }, 500);
   }
 
@@ -80,8 +82,14 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.communication.currentInputs.subscribe(inputsState => {
+      this.acumulator = String(inputsState[0]);
+      this.kernel = Number(inputsState[1]);
+      this.memory = Number(inputsState[2]);
+    });
     this.helper.currentShowEvent.subscribe(state => {
       this.buttonState = state;
+      this.loadInputs([+this.acumulator, +this.kernel, +this.memory]);
     });
     this.helper.currentFileToRun.subscribe(value => {
       this.fileToRun = value;
@@ -128,13 +136,6 @@ export class HomeComponent implements OnInit {
 
   loadInformation(filesArray: any[]): void {
     this.communication.showInfoEvent(filesArray);
-  }
-
-  loadKernel(kernel: number): void {
-    this.helper.editKernelEvent(kernel);
-  }
-  loadMemory(memory: number): void {
-    this.helper.editMemoryEvent(memory);
   }
 
   loadInputs(inputs: number[]): void {

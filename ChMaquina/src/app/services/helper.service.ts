@@ -18,12 +18,6 @@ export class HelperService {
   private acumulator = new BehaviorSubject<number>(0);
   currentAcumulator = this.acumulator.asObservable();
 
-  private kernel = new BehaviorSubject<number>(0);
-  currentKernel = this.kernel.asObservable();
-
-  private memory = new BehaviorSubject<number>(0);
-  currentMemory = this.memory.asObservable();
-
   constructor() { }
 
   editShowEvent(newClick: boolean) {
@@ -41,10 +35,5 @@ export class HelperService {
   editAcumulatorEvent(acumulator: number) {
     this.acumulator.next(acumulator);
   }
-  editKernelEvent(kernel: number) {
-    this.kernel.next(kernel);
-  }
-  editMemoryEvent(memory: number) {
-    this.memory.next(memory);
-  }
+
 }

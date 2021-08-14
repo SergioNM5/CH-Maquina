@@ -16,12 +16,12 @@ export class AlgorithmManagementService {
       filesArray = filesArray.sort(
         (a, b) => Number(a._amountInst) - Number(b._amountInst)
       );
-      // } else if (algorithmToUse === 'srtn') {
+    } else if (algorithmToUse === 'srtn') {
 
-      //     // missing implementation
+      
 
     } else if (algorithmToUse === 'rr') {
-      
+
 
     } else if (algorithmToUse === 'priority') {
       filesArray = filesArray.sort(
