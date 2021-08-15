@@ -6,6 +6,7 @@ import { state } from '@angular/animations';
 import { RunProcessService } from '../services/run-process.service';
 import { RunStepToStepService } from '../services/run-step-to-step.service';
 import { AlgorithmManagementService } from '../services/algorithm-management.service';
+import { RunRoundRobinService } from '../services/run-round-robin.service';
 
 @Component({
   selector: 'app-home',
@@ -28,6 +29,7 @@ export class HomeComponent implements OnInit {
   filesControllerSts: number = 0;
   amountSteptoStep: number = 0;
   algorithmToUse: string = 'rr';
+  quantum: number = 0;
 
   constructor(
     private processFile: ProcessFileService,
@@ -35,7 +37,8 @@ export class HomeComponent implements OnInit {
     private communication: CommunicationService,
     private runProcess: RunProcessService,
     private step: RunStepToStepService,
-    private algorithmManagement: AlgorithmManagementService
+    private algorithmManagement: AlgorithmManagementService,
+    private runRoundRobinService: RunRoundRobinService
   ) { }
 
   onFileSelected(event: any) {
@@ -61,14 +64,12 @@ export class HomeComponent implements OnInit {
         alert('Capacidad de Memoria excedida');
       }
       this.loadInformation(this.filesArray);
-      this.loadInputs([+this.acumulator, +this.kernel, +this.memory]);
+      this.loadInputs([+this.acumulator, +this.kernel, +this.memory, +this.quantum]);
       this.filesArray = this.algorithmManagement.timeOrderer(this.filesArray);
     }, 500);
     setTimeout(() => {
       console.log(this.filesArray);
-      this.filesArray = this.algorithmManagement.orderFiles(this.filesArray, this.algorithmToUse);
-      console.log(this.kernel);
-
+      this.filesArray = this.algorithmManagement.orderFiles(this.filesArray, this.algorithmToUse, this.quantum);
     }, 500);
   }
 
@@ -86,16 +87,31 @@ export class HomeComponent implements OnInit {
       this.acumulator = String(inputsState[0]);
       this.kernel = Number(inputsState[1]);
       this.memory = Number(inputsState[2]);
+      this.quantum = Number(inputsState[3]);
     });
     this.helper.currentShowEvent.subscribe(state => {
-      this.buttonState = state;
-      this.loadInputs([+this.acumulator, +this.kernel, +this.memory]);
+      if (this.memory >= 0 && this.memory <= 9999) {
+        this.buttonState = state;
+        this.loadInputs([+this.acumulator, +this.kernel, +this.memory, +this.quantum]);
+      } else {
+        alert("La memoria no puede sobrepasar el valor de 9999");
+        window.location.reload();
+      }
+      if (this.algorithmToUse === 'rr' && this.buttonState && this.quantum === 0) {
+        let quantum: string | null = prompt(`Ingrese el valor del quantum, por defecto será 5`);
+        this.quantum = quantum ? Number(quantum) : 5;
+        this.loadInputs([+this.acumulator, +this.kernel, +this.memory, +this.quantum]);
+      }
     });
     this.helper.currentFileToRun.subscribe(value => {
       this.fileToRun = value;
       if (this.filesArray.length !== 0 && this.fileToRun < this.filesArray.length) {
-        [this.filesArray[this.fileToRun], this.filesArray[this.fileToRun].listToShow, this.filesArray[this.fileToRun].listToPrint] = this.runProcess.runProgram(this.filesArray[this.fileToRun], this.acumulator);
-        let monitor: any = document.getElementById("monitor");
+        if (this.algorithmToUse === 'rr') {
+          this.filesArray = this.runRoundRobinService.runRoundRobin(this.filesArray, this.acumulator, this.quantum);
+        } else {
+          [this.filesArray[this.fileToRun], this.filesArray[this.fileToRun].listToShow, this.filesArray[this.fileToRun].listToPrint] = this.runProcess.runProgram(this.filesArray[this.fileToRun], this.acumulator);
+        }
+          let monitor: any = document.getElementById("monitor");
         monitor.innerHTML = "";
         let listMessageToShow: string[] = [];
         for (let message of this.filesArray[this.fileToRun].listToShow) {
@@ -114,7 +130,7 @@ export class HomeComponent implements OnInit {
     this.helper.currentAmountSteptoStep.subscribe(() => {
       if(this.filesArray.length !== 0 && this.amountSteptoStep < this.filesArray[this.filesControllerSts].codeLines.length) {
         [this.filesArray[this.filesControllerSts], this.filesArray[this.filesControllerSts].listToShow, this.filesArray[this.filesControllerSts].listToPrint, this.acumulator, this.amountSteptoStep] = this.step.stepToStep(this.filesArray[this.filesControllerSts], this.acumulator, this.amountSteptoStep);
-        this.loadInputs([+this.acumulator, +this.kernel, +this.memory]);
+        this.loadInputs([+this.acumulator, +this.kernel, +this.memory, +this.quantum]);
         let monitor: any = document.getElementById("monitor");
         monitor.innerHTML = "";
         let listMessageToShow: string[] = [];
@@ -149,8 +165,6 @@ export class HomeComponent implements OnInit {
 
   getAlgorithm(event: any): void {
     this.algorithmToUse = event.target.value;
-    this.filesArray = this.algorithmManagement.orderFiles(this.filesArray, this.algorithmToUse);
-    console.log(this.filesArray);
-
+    this.filesArray = this.algorithmManagement.orderFiles(this.filesArray, this.algorithmToUse, this.quantum);
   }
 }

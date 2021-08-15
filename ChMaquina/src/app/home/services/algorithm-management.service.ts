@@ -7,7 +7,7 @@ import { FileCH } from 'src/app/models/file-ch';
 export class AlgorithmManagementService {
   constructor() {}
 
-  orderFiles(filesArray: FileCH[], algorithmToUse: string): FileCH[] {
+  orderFiles(filesArray: FileCH[], algorithmToUse: string, quantum: number): FileCH[] {
 
     if (algorithmToUse === 'fcfs') {
       filesArray = filesArray.sort((a, b) => Number(a._id) - Number(b._id));
@@ -18,10 +18,11 @@ export class AlgorithmManagementService {
       );
     } else if (algorithmToUse === 'srtn') {
 
-      
+
 
     } else if (algorithmToUse === 'rr') {
 
+      filesArray[0].endingRr = quantum;
 
     } else if (algorithmToUse === 'priority') {
       filesArray = filesArray.sort(

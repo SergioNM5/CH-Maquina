@@ -29,6 +29,10 @@ export class FileCH {
   arrivalTime: number = 0;
   // priority
   priority: number = 0;
+  // initial for rr
+  initialRr: number = 0;
+  // ending for rr
+  endingRr: number = 0;
   // slice (Q)
   slice: number = 0;
 
