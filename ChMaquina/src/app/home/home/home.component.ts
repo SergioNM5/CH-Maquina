@@ -7,6 +7,7 @@ import { RunProcessService } from '../services/run-process.service';
 import { RunStepToStepService } from '../services/run-step-to-step.service';
 import { AlgorithmManagementService } from '../services/algorithm-management.service';
 import { RunRoundRobinService } from '../services/run-round-robin.service';
+import { SrtnService } from '../services/srtn.service';
 
 @Component({
   selector: 'app-home',
@@ -38,7 +39,8 @@ export class HomeComponent implements OnInit {
     private runProcess: RunProcessService,
     private step: RunStepToStepService,
     private algorithmManagement: AlgorithmManagementService,
-    private runRoundRobinService: RunRoundRobinService
+    private runRoundRobinService: RunRoundRobinService,
+    private srtnService: SrtnService
   ) { }
 
   onFileSelected(event: any) {
@@ -126,7 +128,27 @@ export class HomeComponent implements OnInit {
             }
             printer.innerHTML = listMessageToPrint.join('<br></br>');
           }
-        } else {
+        } else if (this.algorithmToUse === 'srtn') {
+          this.filesArray = this.srtnService.runSrtn(this.filesArray);
+          for (let file of this.filesArray) {
+            let monitor: any = document.getElementById("monitor");
+            monitor.innerHTML = "";
+            let listMessageToShow: string[] = [];
+            console.log(file[this.fileToRun], file[this.fileToRun].listToShow, 'list');
+
+            for (let message of file[this.fileToRun].listToShow) {
+              listMessageToShow.push(`${message[0]}: ${message[1]}`);
+            }
+            monitor.innerHTML = listMessageToShow.join('<br></br>');
+            let printer: any = document.getElementById("printer")
+            printer.innerHTML = "";
+            let listMessageToPrint: string[] = [];
+            for (let message of file[this.fileToRun].listToPrint) {
+              listMessageToPrint.push(`${message[0]}: ${message[1]}`);
+            }
+            printer.innerHTML = listMessageToPrint.join('<br></br>');
+          }
+        }else {
           [this.filesArray[this.fileToRun], this.filesArray[this.fileToRun].listToShow, this.filesArray[this.fileToRun].listToPrint] = this.runProcess.runProgram(this.filesArray[this.fileToRun], this.acumulator);
           let monitor: any = document.getElementById("monitor");
           monitor.innerHTML = "";
