@@ -5,7 +5,7 @@ import { FileCH } from 'src/app/models/file-ch';
   providedIn: 'root',
 })
 export class AlgorithmManagementService {
-  constructor() {}
+  constructor() { }
 
   orderFiles(filesArray: FileCH[], algorithmToUse: string, quantum: number): FileCH[] {
 
@@ -18,9 +18,19 @@ export class AlgorithmManagementService {
       );
     } else if (algorithmToUse === 'srtn') {
 
-
+      
 
     } else if (algorithmToUse === 'rr') {
+
+      for (let file of filesArray) {
+        file.endingRr = quantum;
+      }
+
+    } else if (algorithmToUse === 'rrPriority') {
+
+      filesArray = filesArray.sort(
+        (a, b) => Number(b.priority) - Number(a.priority)
+      );
 
       for (let file of filesArray) {
         file.endingRr = quantum;
@@ -40,13 +50,7 @@ export class AlgorithmManagementService {
       filesArray[0].arrivalTime = 0;
     } else {
       for (let i = 1; i < filesArray.length; i++) {
-        filesArray[i].arrivalTime = Number(
-          (
-            (filesArray[i - 1].arrivalTime +
-              Number(filesArray[i - 1]._amountInst)) /
-            4
-          ).toFixed(3)
-        );
+        filesArray[i].arrivalTime = Number(((filesArray[i - 1].arrivalTime + Number(filesArray[i - 1]._amountInst)) / 4).toFixed(0));
       }
     }
 

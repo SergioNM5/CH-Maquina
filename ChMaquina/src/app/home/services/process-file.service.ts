@@ -56,7 +56,7 @@ export class ProcessFileService {
     fileCh.burstIO = resultSyntax[3];
     fileCh.burstCPU = resultSyntax[4];
     fileCh.slice = resultSyntax[5];
-    if(algorithmToUse === 'priority'){
+    if(algorithmToUse === 'priority' || algorithmToUse === 'rrPriority') {
       fileCh.priority = Number(prompt(`Defina la prioridad del proceso: ${fileCh._name} en un rango de 0 a 100`));
       while (fileCh.priority < 0 || fileCh.priority > 100) {
         fileCh.priority = Number(prompt(`El valor ingresado no cumple con los parametros establecidos, debe estar en un rango de 0 a 100.

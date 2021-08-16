@@ -106,7 +106,7 @@ export class HomeComponent implements OnInit {
     this.helper.currentFileToRun.subscribe(value => {
       this.fileToRun = value;
       if (this.filesArray.length !== 0 && this.fileToRun < this.filesArray.length) {
-        if (this.algorithmToUse === 'rr') {
+        if (this.algorithmToUse === 'rr' || this.algorithmToUse === 'rrPriority') {
           this.filesArray = this.runRoundRobinService.runRoundRobin(this.filesArray, this.quantum);
           for (let file of this.filesArray) {
             let monitor: any = document.getElementById("monitor");

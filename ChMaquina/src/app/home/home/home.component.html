@@ -12,6 +12,7 @@
         <mat-label>Algoritmo</mat-label>
         <select matNativeControl required [disabled]='buttonState' id="algorithmToUse" (change)="getAlgorithm($event)">
           <option value="rr">RoundRobin</option>
+          <option value="rrPriority">RoundRobin con Prioridad</option>
           <option value="fcfs">FCFS</option>
           <option value="sjf">SJF</option>
           <option value="srtn">SRTN</option>
