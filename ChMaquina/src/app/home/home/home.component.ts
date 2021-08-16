@@ -107,28 +107,46 @@ export class HomeComponent implements OnInit {
       this.fileToRun = value;
       if (this.filesArray.length !== 0 && this.fileToRun < this.filesArray.length) {
         if (this.algorithmToUse === 'rr') {
-          this.filesArray = this.runRoundRobinService.runRoundRobin(this.filesArray, this.acumulator, this.quantum);
+          this.filesArray = this.runRoundRobinService.runRoundRobin(this.filesArray, this.quantum);
+          for (let file of this.filesArray) {
+            let monitor: any = document.getElementById("monitor");
+            monitor.innerHTML = "";
+            let listMessageToShow: string[] = [];
+            console.log(file[this.fileToRun], file[this.fileToRun].listToShow, 'list');
+
+            for (let message of file[this.fileToRun].listToShow) {
+              listMessageToShow.push(`${message[0]}: ${message[1]}`);
+            }
+            monitor.innerHTML = listMessageToShow.join('<br></br>');
+            let printer: any = document.getElementById("printer")
+            printer.innerHTML = "";
+            let listMessageToPrint: string[] = [];
+            for (let message of file[this.fileToRun].listToPrint) {
+              listMessageToPrint.push(`${message[0]}: ${message[1]}`);
+            }
+            printer.innerHTML = listMessageToPrint.join('<br></br>');
+          }
         } else {
           [this.filesArray[this.fileToRun], this.filesArray[this.fileToRun].listToShow, this.filesArray[this.fileToRun].listToPrint] = this.runProcess.runProgram(this.filesArray[this.fileToRun], this.acumulator);
-        }
           let monitor: any = document.getElementById("monitor");
-        monitor.innerHTML = "";
-        let listMessageToShow: string[] = [];
-        for (let message of this.filesArray[this.fileToRun].listToShow) {
-          listMessageToShow.push(`${message[0]}: ${message[1]}`);
+          monitor.innerHTML = "";
+          let listMessageToShow: string[] = [];
+          for (let message of this.filesArray[this.fileToRun].listToShow) {
+            listMessageToShow.push(`${message[0]}: ${message[1]}`);
+          }
+          monitor.innerHTML = listMessageToShow.join('<br></br>');
+          let printer: any = document.getElementById("printer")
+          printer.innerHTML = "";
+          let listMessageToPrint: string[] = [];
+          for (let message of this.filesArray[this.fileToRun].listToPrint) {
+            listMessageToPrint.push(`${message[0]}: ${message[1]}`);
+          }
+          printer.innerHTML = listMessageToPrint.join('<br></br>');
         }
-        monitor.innerHTML = listMessageToShow.join('<br></br>');
-        let printer: any = document.getElementById("printer")
-        printer.innerHTML = "";
-        let listMessageToPrint: string[] = [];
-        for (let message of this.filesArray[this.fileToRun].listToPrint) {
-          listMessageToPrint.push(`${message[0]}: ${message[1]}`);
-        }
-        printer.innerHTML = listMessageToPrint.join('<br></br>');
       }
     });
     this.helper.currentAmountSteptoStep.subscribe(() => {
-      if(this.filesArray.length !== 0 && this.amountSteptoStep < this.filesArray[this.filesControllerSts].codeLines.length) {
+      if (this.filesArray.length !== 0 && this.amountSteptoStep < this.filesArray[this.filesControllerSts].codeLines.length) {
         [this.filesArray[this.filesControllerSts], this.filesArray[this.filesControllerSts].listToShow, this.filesArray[this.filesControllerSts].listToPrint, this.acumulator, this.amountSteptoStep] = this.step.stepToStep(this.filesArray[this.filesControllerSts], this.acumulator, this.amountSteptoStep);
         this.loadInputs([+this.acumulator, +this.kernel, +this.memory, +this.quantum]);
         let monitor: any = document.getElementById("monitor");

@@ -11,15 +11,16 @@ export class RunRoundRobinService {
 
   constructor() { }
 
-  runRoundRobin(filesArray: FileCH[], acumulador: string, quantum: number): [FileCH[]] {//, any[], any[]
+  runRoundRobin(filesArray: FileCH[], quantum: number): [FileCH[]] {
+
+    let acumulador: string;
 
     let listToShow: any[] = [];
     let listToPrint: any[] = [];
 
     for (let file = 0; file < filesArray.length; file++) {
-      console.log(file);
-
-      if (this.filesStateList.length === 0) {
+      
+      if (this.filesStateList.length < filesArray.length) {
         acumulador = '0';
       } else {
         acumulador = this.filesStateList[file][1];
@@ -68,7 +69,7 @@ export class RunRoundRobinService {
           for (let variable = 0; variable < filesArray[file].variables.length; variable++) {
 
             if (filesArray[file].codeLines[instruccion][1] == filesArray[file].variables[variable].name) {
-              acumulador = String(Number(Number(acumulador)) * Number(filesArray[file].variables[variable].value));
+              acumulador = String(Number(acumulador) * Number(filesArray[file].variables[variable].value));              
             }
 
           }
@@ -290,29 +291,46 @@ export class RunRoundRobinService {
 
           }
         }
+
+        if (listToShow.length > 0) {
+          filesArray[file].listToShow = listToShow;
+        }
+
+        if (listToPrint.length > 0) {
+          filesArray[file].listToPrint = listToPrint;
+        }
+
+        console.log(acumulador);
+        
+
       }
 
       filesArray[file].initialRr += quantum;
       filesArray[file].endingRr += quantum;
+      
       if (filesArray[file].endingRr > filesArray[file].codeLines.length) {
+        
         filesArray[file].endingRr = filesArray[file].codeLines.length;
+        
+        if (this.quantumCounter !== quantum) {
+          this.quantumCounter = quantum - 1;
+        }
+
       }
+     
+      if (this.filesStateList.length < filesArray.length) {
+        this.filesStateList.push([filesArray[file], acumulador]);
+      }
+
+      this.filesStateList[file] = [filesArray[file], acumulador];
+      
       if (file === filesArray.length - 1 && this.quantumCounter < quantum) {
         file = -1;
         this.quantumCounter += 1;
-      }
-      if (this.quantumCounter === 0) {
-        let mapFiles: any[] = [];
-        mapFiles.push([filesArray[file], acumulador]);
-        this.filesStateList.push(mapFiles);
-      } else {
-        this.filesStateList[file] = [filesArray[file], acumulador];
-      }
-      console.log(this.filesStateList);
-
-
+      } 
+            
     }
-    return [filesArray]; //, listToShow, listToPrint
+    return [filesArray];
 
   }
 

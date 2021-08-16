@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { HelperService } from '../services/helper.service';
 import { CommunicationService } from '../services/communication.service';
-import { RunStepToStepService } from '../home/services/run-step-to-step.service';
 
 @Component({
   selector: 'app-nav',

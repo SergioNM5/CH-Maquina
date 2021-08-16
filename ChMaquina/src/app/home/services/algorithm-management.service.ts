@@ -22,7 +22,9 @@ export class AlgorithmManagementService {
 
     } else if (algorithmToUse === 'rr') {
 
-      filesArray[0].endingRr = quantum;
+      for (let file of filesArray) {
+        file.endingRr = quantum;
+      }
 
     } else if (algorithmToUse === 'priority') {
       filesArray = filesArray.sort(
