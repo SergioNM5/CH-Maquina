@@ -136,6 +136,7 @@ export class CheckSyntaxService {
         }
         burstIOCount++;
         slice += Math.floor(Math.random() * 9) + 1;
+        burstCPUCount += slice;
 
       } else if (codeLines[instruccion][0].trim().toLowerCase() == 'cargue') {
 
@@ -339,6 +340,7 @@ export class CheckSyntaxService {
         }
         burstIOCount++;
         slice += Math.floor(Math.random() * 9) + 1;
+        burstCPUCount += slice;
 
       } else if (codeLines[instruccion][0].trim().toLowerCase() == 'imprima') {
 
@@ -350,6 +352,7 @@ export class CheckSyntaxService {
         }
         burstIOCount++;
         slice += Math.floor(Math.random() * 9) + 1;
+        burstCPUCount += slice;
 
       } else if (codeLines[instruccion][0].trim().toLowerCase() == 'retorne') {
 

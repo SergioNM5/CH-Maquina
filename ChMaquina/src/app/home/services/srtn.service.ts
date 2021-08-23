@@ -36,15 +36,12 @@ export class SrtnService {
         file = 0;
         this.filesStateList[file].endingRr = filesArray[file + 1].arrivalTime - 1;
       } else {
-        console.log(this.filesStateList);
-
         this.filesStateList[0].endingRr = this.filesStateList[0].codeLines.length - 1;
         this.filesStateList[0].burstCPU = 1000;
         file = 0;
       }
 
       acumulador = this.filesStateList[0].acumulator;
-      console.log(acumulador);
 
       for (let instruccion = this.filesStateList[file].initialRr; instruccion < this.filesStateList[file].endingRr; instruccion++) {
         console.log(this.filesStateList[file]._name, this.filesStateList[file].codeLines[instruccion]);
@@ -320,9 +317,6 @@ export class SrtnService {
           this.filesStateList[file].listToPrint = listToPrint;
         }
 
-        console.log(acumulador);
-
-
       }
 
       this.filesStateList[file].initialRr = this.filesStateList[file].endingRr;
@@ -336,8 +330,6 @@ export class SrtnService {
         if (miniFile.burstCPU > 500) {
           file = filesArray.length;
         } else {
-          console.log("entra");
-
           if (this.filesStateList.length === filesArray.length) {
             file = this.filesStateList.length - 2;
           } else {
@@ -347,12 +339,7 @@ export class SrtnService {
         }
       }
 
-      // Encontrar al que menor arrivalTime valido tenga
-      console.log(this.filesStateList);
-      console.log(file, 'fileSer');
-
-
-      debugger;
+      // debugger;
     }
 
     for (let miniStateList = 0; miniStateList < this.filesStateList.length; miniStateList++) {
