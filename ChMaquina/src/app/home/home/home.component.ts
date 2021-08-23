@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ProcessFileService } from '../services/process-file.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { CommunicationService } from 'src/app/services/communication.service';
-import { state } from '@angular/animations';
 import { RunProcessService } from '../services/run-process.service';
 import { RunStepToStepService } from '../services/run-step-to-step.service';
 import { AlgorithmManagementService } from '../services/algorithm-management.service';
@@ -130,6 +129,8 @@ export class HomeComponent implements OnInit {
           }
         } else if (this.algorithmToUse === 'srtn') {
           this.filesArray = this.srtnService.runSrtn(this.filesArray);
+          console.log(this.filesArray);
+
           for (let file of this.filesArray) {
             let monitor: any = document.getElementById("monitor");
             monitor.innerHTML = "";

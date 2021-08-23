@@ -24,6 +24,7 @@ export class NavComponent implements OnInit {
   filesArray: any[] = [];
   fileToRun: number = 0;
   amountSteptoStep: number = 0;
+  mode: string = 'Modo Kernel'
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -42,6 +43,7 @@ export class NavComponent implements OnInit {
   }
 
   toggleEvent(event: any): void {
+    this.mode = 'Modo Usuario';
     this.showEvent = !this.showEvent;
     this.helper.editShowEvent(this.showEvent);
     if (this.showEvent) {

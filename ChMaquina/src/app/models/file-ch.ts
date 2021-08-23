@@ -35,6 +35,8 @@ export class FileCH {
   endingRr: number = 0;
   // slice (Q)
   slice: number = 0;
+  // acumulator for sjrf
+  acumulator: number = 0;
 
   constructor() {
   }

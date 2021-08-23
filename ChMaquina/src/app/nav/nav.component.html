@@ -21,7 +21,7 @@
         *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span class="title-nav">ChMaquina</span>
+      <span class="title-nav">ChMaquina: {{ mode }}</span>
       <header class="header">
         <button mat-raised-button class="button-nav" (click)="toggleEvent($event)"> {{ btnMessage }} </button>
         <button mat-raised-button class="button-nav" (click)="runEvent($event)" [disabled]="!enableButtons">Ejecutar programa</button>
