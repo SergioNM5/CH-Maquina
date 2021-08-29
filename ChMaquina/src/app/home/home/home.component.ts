@@ -25,10 +25,10 @@ export class HomeComponent implements OnInit {
   contId: number = Number(1) + Number(this.kernel);
   buttonState: boolean = false;
   fileToRun: number = 0;
-  filesControllerStsToShow: number = 1;
+  filesControllerStsToShow: number = 0;
   filesControllerSts: number = 0;
   amountSteptoStep: number = 0;
-  algorithmToUse: string = 'rr';
+  algorithmToUse: string = '';
   quantum: number = 0;
 
   constructor(
@@ -57,20 +57,19 @@ export class HomeComponent implements OnInit {
     fileReader.readAsText(this.file);
     setTimeout(() => {
       this.filesArray.push(this.processFile.transformFile(this.fileLoaded, this.kernel, this.contId, this.filesArray.length, this.fileName, this.algorithmToUse));
-      if (this.filesArray.length > 0) {
-        this.contId = +this.filesArray[this.filesArray.length - 1].fpvMemory + 1;
-      }
       if (this.filesArray[this.filesArray.length - 1].fpvMemory > this.memory) {
         this.filesArray.pop();
         alert('Capacidad de Memoria excedida');
       }
       this.loadInformation(this.filesArray);
-      this.loadInputs([+this.acumulator, +this.kernel, +this.memory, +this.quantum]);
+      this.loadInputs([+this.acumulator, +this.kernel, +this.memory, +this.quantum, +this.filesControllerStsToShow]);
+      this.loadAlgorithm(this.algorithmToUse);
       this.filesArray = this.algorithmManagement.timeOrderer(this.filesArray);
     }, 500);
     setTimeout(() => {
       console.log(this.filesArray);
-      this.filesArray = this.algorithmManagement.orderFiles(this.filesArray, this.algorithmToUse, this.quantum);
+      [this.filesArray, this.contId] = this.algorithmManagement.orderFiles(this.filesArray, this.algorithmToUse, this.quantum, this.contId);
+
     }, 500);
   }
 
@@ -84,16 +83,22 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.communication.currentAlgorithm.subscribe(algorithm => {
+      this.algorithmToUse = algorithm;
+      console.log(this.algorithmToUse, 'subscribe');
+
+    });
     this.communication.currentInputs.subscribe(inputsState => {
       this.acumulator = String(inputsState[0]);
       this.kernel = Number(inputsState[1]);
       this.memory = Number(inputsState[2]);
       this.quantum = Number(inputsState[3]);
+      this.filesControllerStsToShow = Number(inputsState[4]);
     });
     this.helper.currentShowEvent.subscribe(state => {
       if (this.memory >= 0 && this.memory <= 9999) {
         this.buttonState = state;
-        this.loadInputs([+this.acumulator, +this.kernel, +this.memory, +this.quantum]);
+        this.loadInputs([+this.acumulator, +this.kernel, +this.memory, +this.quantum, +this.filesControllerStsToShow]);
       } else {
         alert("La memoria no puede sobrepasar el valor de 9999");
         window.location.reload();
@@ -101,7 +106,7 @@ export class HomeComponent implements OnInit {
       if (this.algorithmToUse === 'rr' && this.buttonState && this.quantum === 0) {
         let quantum: string | null = prompt(`Ingrese el valor del quantum, por defecto será 5`);
         this.quantum = quantum ? Number(quantum) : 5;
-        this.loadInputs([+this.acumulator, +this.kernel, +this.memory, +this.quantum]);
+        this.loadInputs([+this.acumulator, +this.kernel, +this.memory, +this.quantum, this.filesControllerStsToShow]);
       }
     });
     this.helper.currentFileToRun.subscribe(value => {
@@ -113,8 +118,6 @@ export class HomeComponent implements OnInit {
             let monitor: any = document.getElementById("monitor");
             monitor.innerHTML = "";
             let listMessageToShow: string[] = [];
-            console.log(file[this.fileToRun], file[this.fileToRun].listToShow, 'list');
-
             for (let message of file[this.fileToRun].listToShow) {
               listMessageToShow.push(`${message[0]}: ${message[1]}`);
             }
@@ -135,8 +138,6 @@ export class HomeComponent implements OnInit {
             let monitor: any = document.getElementById("monitor");
             monitor.innerHTML = "";
             let listMessageToShow: string[] = [];
-            console.log(file[this.fileToRun], file[this.fileToRun].listToShow, 'list');
-
             for (let message of file[this.fileToRun].listToShow) {
               listMessageToShow.push(`${message[0]}: ${message[1]}`);
             }
@@ -171,18 +172,19 @@ export class HomeComponent implements OnInit {
     this.helper.currentAmountSteptoStep.subscribe(() => {
       if (this.filesArray.length !== 0 && this.amountSteptoStep < this.filesArray[this.filesControllerSts].codeLines.length) {
         [this.filesArray[this.filesControllerSts], this.filesArray[this.filesControllerSts].listToShow, this.filesArray[this.filesControllerSts].listToPrint, this.acumulator, this.amountSteptoStep] = this.step.stepToStep(this.filesArray[this.filesControllerSts], this.acumulator, this.amountSteptoStep);
-        this.loadInputs([+this.acumulator, +this.kernel, +this.memory, +this.quantum]);
+        this.loadInputs([+this.acumulator, +this.kernel, +this.memory, +this.quantum, +this.filesControllerStsToShow]);
+        this.loadAlgorithm(this.algorithmToUse);
         let monitor: any = document.getElementById("monitor");
         monitor.innerHTML = "";
         let listMessageToShow: string[] = [];
-        for (let message of this.filesArray[this.fileToRun].listToShow) {
+        for (let message of this.filesArray[this.filesControllerSts].listToShow) {
           listMessageToShow.push(`${message[0]}: ${message[1]}`);
         }
         monitor.innerHTML = listMessageToShow.join('<br></br>');
         let printer: any = document.getElementById("printer");
         printer.innerHTML = "";
         let listMessageToPrint: string[] = [];
-        for (let message of this.filesArray[this.fileToRun].listToPrint) {
+        for (let message of this.filesArray[this.filesControllerSts].listToPrint) {
           listMessageToPrint.push(`${message[0]}: ${message[1]}`);
         }
         printer.innerHTML = listMessageToPrint.join('<br></br>');
@@ -199,13 +201,19 @@ export class HomeComponent implements OnInit {
     this.communication.showInputs(inputs);
   }
 
+  loadAlgorithm(algorithm: string): void {
+    this.communication.showAlgorithm(algorithm);
+  }
+
   getController(event: any): void {
     this.filesControllerStsToShow = event.target.value;
     this.filesControllerSts = this.filesControllerStsToShow - 1;
+    this.amountSteptoStep = 0;
+    this.helper.editAmountSteptoStepEvent(this.amountSteptoStep);
   }
 
   getAlgorithm(event: any): void {
     this.algorithmToUse = event.target.value;
-    this.filesArray = this.algorithmManagement.orderFiles(this.filesArray, this.algorithmToUse, this.quantum);
+    this.loadAlgorithm(this.algorithmToUse);
   }
 }

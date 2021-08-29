@@ -35,6 +35,10 @@ export class MemoryComponent implements OnInit {
     this.communication.currentShowEvent.subscribe(state => {
       this.filesArray = state;
 
+      let filesToShow: any[] = [];
+
+      filesToShow = this.filesArray.sort((a, b) => Number(a._id) - Number(b._id));
+
       this.DATA_MEMORY.push({
         id: '0000',
         value: this.acumulator
@@ -47,7 +51,7 @@ export class MemoryComponent implements OnInit {
         this.DATA_MEMORY.push(valueKernel);
       }
 
-      for (let file of this.filesArray) {
+      for (let file of filesToShow) {
         let linesSpaced: string[] = [];
         for (let i of file.codeLines) {
           linesSpaced.push(i.join(' '));

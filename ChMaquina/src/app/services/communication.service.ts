@@ -12,8 +12,12 @@ export class CommunicationService {
   currentShowEvent = this.showEvent.asObservable();
 
   // Acumulator, Kernel and Memory Array Observable
-  private inputs = new BehaviorSubject<number[]>([0,19,100,0]);
+  private inputs = new BehaviorSubject<number[]>([0,19,100,0,1]);
   currentInputs = this.inputs.asObservable();
+
+  //Algorithm to use
+  private algorithm = new BehaviorSubject<string>('rr');
+  currentAlgorithm = this.algorithm.asObservable();
 
   constructor() { }
 
@@ -23,5 +27,9 @@ export class CommunicationService {
 
   showInputs(inputs: number[]) {
     this.inputs.next(inputs);
+  }
+
+  showAlgorithm(newAlgorithm: string) {
+    this.algorithm.next(newAlgorithm);
   }
 }
