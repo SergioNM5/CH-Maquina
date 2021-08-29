@@ -23,7 +23,16 @@ export class InstructionsComponent implements OnInit {
   ngOnInit(): void {
     this.communication.currentShowEvent.subscribe(state => {
       this.filesArray = state
+
+      let filesToShow: any[] = [];
+
       for (let file of this.filesArray) {
+        filesToShow.push(file);
+      }
+
+      filesToShow = filesToShow.sort((a, b) => Number(a._id) - Number(b._id));
+
+      for (let file of filesToShow) {
         let linesSpaced: string[] = [];
         for (let i of file.codeLines) {
           linesSpaced.push(i.join(' '));

@@ -45,8 +45,9 @@ export class HomeComponent implements OnInit {
   onFileSelected(event: any) {
     this.communication.currentShowEvent.subscribe(state => {
       this.filesArray = state;
-      this.contId = (this.filesArray[this.filesArray.length - 1]) != undefined ?
-        +this.filesArray[this.filesArray.length - 1].fpvMemory + 1 : 1 + Number(this.kernel);
+      if ((this.filesArray[this.filesArray.length - 1]) === undefined) {
+        this.contId = 1 + Number(this.kernel);
+      }
     });
     this.file = event.target.files[0];
     this.fileName = event.target.files[0].name;

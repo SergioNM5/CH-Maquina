@@ -15,6 +15,7 @@ export class AlgorithmManagementService {
       filesArray = filesArray.sort((a, b) => Number(a._id) - Number(b._id));
 
     } else if (algorithmToUse === 'sjf') {
+      
       filesArray = filesArray.sort((a, b) => Number(a._id) - Number(b._id));
 
       contId2 = +filesArray[filesArray.length - 1].fpvMemory + 1;
@@ -24,19 +25,11 @@ export class AlgorithmManagementService {
       );
     } else if (algorithmToUse === 'srtn') {
 
-      let filesArrayFake = filesArray.sort((a, b) => Number(a._id) - Number(b._id));
-
-      contId2 = +filesArrayFake[filesArrayFake.length - 1].fpvMemory + 1;
-
     } else if (algorithmToUse === 'rr') {
 
       for (let file of filesArray) {
         file.endingRr = quantum;
       }
-
-      let filesArrayFake = filesArray.sort((a, b) => Number(a._id) - Number(b._id));
-
-      contId2 = +filesArrayFake[filesArrayFake.length - 1].fpvMemory + 1;
 
     } else if (algorithmToUse === 'rrPriority') {
 

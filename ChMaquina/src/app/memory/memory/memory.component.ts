@@ -37,7 +37,11 @@ export class MemoryComponent implements OnInit {
 
       let filesToShow: any[] = [];
 
-      filesToShow = this.filesArray.sort((a, b) => Number(a._id) - Number(b._id));
+      for (let file of this.filesArray) {
+        filesToShow.push(file);
+      }
+
+      filesToShow = filesToShow.sort((a, b) => Number(a._id) - Number(b._id));
 
       this.DATA_MEMORY.push({
         id: '0000',
